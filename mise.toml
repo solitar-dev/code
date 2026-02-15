@@ -1,0 +1,22 @@
+[tools]
+java = "liberica-21"
+node = "25"
+
+[env]
+_.file = ["apps/backend/.env.local", "apps/frontend/.env.local"]
+
+[tasks.dev]
+run = "pnpm dev"
+
+[tasks.lint]
+run = "pnpm lint"
+
+[tasks.lint-fix]
+run = "pnpm lint:fix"
+
+[tasks.build]
+depends = ["lint"]
+run = "pnpm build"
+
+[tasks.test]
+run = "pnpm test"

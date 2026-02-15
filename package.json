@@ -1,0 +1,23 @@
+{
+	"name": "@solitar/monorepo",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"lint:fix": "turbo run lint:fix",
+		"test": "turbo run test",
+		"format": "oxfmt"
+	},
+	"devDependencies": {
+		"lefthook": "^2.1.0",
+		"oxfmt": "^0.28.0",
+		"turbo": "^2.8.3",
+		"typescript": "5.9.2"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "pnpm@9.0.0"
+}

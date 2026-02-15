@@ -1,0 +1,12 @@
+{
+	"oxc.fmt.configPath": ".oxfmtrc.json",
+	"oxc.typeAware": true,
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.oxc": "always"
+	},
+	"workbench.editorAssociations": {
+		"*.svg": "default"
+	}
+}

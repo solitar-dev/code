@@ -1,0 +1,73 @@
+name: Deploy frontend preview
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/frontend-preview.yml"
+      - "apps/frontend/**/*"
+      - "apps/frontend/uno.config.ts"
+      - "apps/frontend/nuxt.config.ts"
+      - "**/wrangler.jsonc"
+      - "**/pnpm-*.yaml"
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    if: github.repository_owner == 'solitar-dev' && github.event.pull_request.head.repo.full_name == github.repository
+    uses: ./.github/workflows/frontend-deploy.yml
+    secrets: inherit
+    strategy:
+      matrix:
+        environment: [staging-preview, production-preview]
+    with:
+      environment: ${{ matrix.environment }}
+
+  comment:
+    if: github.repository_owner == 'solitar-dev' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Download deployment URLs
+        uses: actions/download-artifact@v7
+        with:
+          pattern: deployment-url-*
+          merge-multiple: true
+
+      - name: Read deployment URLs
+        id: urls
+        run: |
+          STAGING_PREVIEW_URL=$(cat deployment-url-staging-preview.txt)
+          PRODUCTION_PREVIEW_URL=$(cat deployment-url-production-preview.txt)
+
+          echo "Production preview URL: $PRODUCTION_PREVIEW_URL"
+          echo "Staging preview URL: $STAGING_PREVIEW_URL"
+
+          echo "staging-preview-url=$STAGING_PREVIEW_URL" >> $GITHUB_OUTPUT
+          echo "production-preview-url=$PRODUCTION_PREVIEW_URL" >> $GITHUB_OUTPUT
+
+      - name: Find comment
+        uses: peter-evans/find-comment@v4
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: Deploy Preview
+
+      - name: Comment deploy URL on PR
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            ## ✅ Deploy Preview for Solitar ready!
+
+            | Name                 | Link |
+            |----------------------|------|
+            | 🔨 Latest commit      | [`${{ github.sha }}`](${{ github.event.pull_request.head.repo.html_url }}/commit/${{ github.sha }}) |
+            | 🧪 Staging preview    | ${{ steps.urls.outputs.staging-preview-url }} |
+            | 😎 Production preview | ${{ steps.urls.outputs.production-preview-url }} |
+          edit-mode: replace

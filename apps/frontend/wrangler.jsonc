@@ -1,0 +1,39 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2025-07-15",
+	"name": "frontend",
+	"compatibility_flags": ["nodejs_compat", "no_nodejs_compat_v2"],
+	"main": "./.output/server/index.mjs",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./.output/public/",
+	},
+	"placement": {
+		"mode": "smart",
+	},
+	"preview_urls": true,
+	"workers_dev": true,
+	"routes": [{ "pattern": "solitar.link", "custom_domain": true }],
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 0.0001,
+	},
+	"keep_vars": false,
+	"vars": {
+		"NUXT_PUBLIC_SITE_URL": "https://solitar.link",
+		"NUXT_PUBLIC_API_BASE_URL": "https://api.solitar.link",
+	},
+	"env": {
+		"staging": {
+			"observability": {
+				"enabled": true,
+				"head_sampling_rate": 0.1,
+			},
+			"routes": [{ "pattern": "staging.solitar.link", "custom_domain": true }],
+			"vars": {
+				"NUXT_PUBLIC_SITE_URL": "https://staging.solitar.link",
+				"NUXT_PUBLIC_API_BASE_URL": "https://staging-api.solitar.link",
+			},
+		},
+	},
+}
