@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.tobynguyen.solitar.model.entity.UrlEntity
 
 interface UrlRepository : JpaRepository<UrlEntity, Long> {
-    @Cacheable(value = ["shortCodes"], key = "#shortCode")
+    @Cacheable(value = ["shortCodes"], key = "#shortCode", unless = "#result == null")
     fun findByShortCode(shortCode: String): UrlEntity?
 
     @Modifying
