@@ -6,19 +6,20 @@ const route = useRoute();
 
 const shortCode = route.params.shortCode!.toString();
 
-try {
-	const data = await $fetch<{ originalUrl: string }>(
-		joinURL(config.public.apiBaseUrl, "forward", shortCode),
-		{
-			method: "get",
-		},
-	);
-	await navigateTo(data.originalUrl, {
+const { data, error } = await useFetch<{ originalUrl: string }>(
+	joinURL(config.public.apiBaseUrl, "forward", shortCode),
+	{ method: "get" },
+);
+
+if (data.value) {
+	await navigateTo(data.value.originalUrl, {
 		external: true,
 		redirectCode: 302,
 	});
-} catch (e) {
-	await navigateTo("/", { redirectCode: 302, replace: true });
+}
+
+if (error) {
+	throw createError({ status: error.value?.status, message: error.value?.data.message });
 }
 </script>
 
