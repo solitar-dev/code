@@ -22,6 +22,7 @@
 	"vars": {
 		"NUXT_PUBLIC_SITE_URL": "https://solitar.link",
 		"NUXT_PUBLIC_API_BASE_URL": "https://api.solitar.link",
+		"NUXT_PUBLIC_PREVIEW": false,
 	},
 	"env": {
 		"staging": {
@@ -33,6 +34,7 @@
 			"vars": {
 				"NUXT_PUBLIC_SITE_URL": "https://staging.solitar.link",
 				"NUXT_PUBLIC_API_BASE_URL": "https://staging-api.solitar.link",
+				"NUXT_PUBLIC_PREVIEW": true,
 			},
 		},
 	},
