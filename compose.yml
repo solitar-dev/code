@@ -1,0 +1,54 @@
+name: solitar
+services:
+  postgres_db:
+    image: postgres:18-alpine
+    container_name: solitar-postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: solitar
+      POSTGRES_PASSWORD: solitar
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGUSER: solitar
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "solitar"]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+
+  solitar:
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    container_name: solitar
+    ports:
+      - "127.0.0.1:8080:8080"
+    env_file: ./apps/backend/.env.docker-compose
+    volumes:
+      - solitar-data:/tmp/solitar
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: solitar-redis
+    restart: on-failure
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  db-data:
+  solitar-data:
+  redis-data:

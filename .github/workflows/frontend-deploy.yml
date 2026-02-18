@@ -1,0 +1,117 @@
+name: Deploy frontend
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+    paths:
+      - ".github/workflows/frontend-deploy.yml"
+      - "apps/frontend/**/*"
+      - "apps/frontend/uno.config.ts"
+      - "apps/frontend/nuxt.config.ts"
+      - "**/wrangler.jsonc"
+      - "**/pnpm-*.yaml"
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: "Environment to deploy to (staging-preview or production-preview)"
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure environment
+        id: metadata
+        run: |
+          echo "cmd=deploy" >> $GITHUB_OUTPUT
+
+          ENV_INPUT="${{ inputs.environment }}"
+          REF="${{ github.ref }}"
+          SHA_SHORT="${GITHUB_SHA::7}"
+
+          if [ "$ENV_INPUT" = "staging-preview" ]; then
+            echo "env=staging" >> $GITHUB_OUTPUT
+            echo "cmd=versions upload --preview-alias pr-$SHA_SHORT" >> $GITHUB_OUTPUT
+            echo "url=https://pr-$SHA_SHORT-frontend-staging.solitar.workers.dev" >> $GITHUB_OUTPUT
+
+          elif [ "$ENV_INPUT" = "production-preview" ]; then
+            echo "env=production" >> $GITHUB_OUTPUT
+            echo "cmd=versions upload --preview-alias pr-$SHA_SHORT" >> $GITHUB_OUTPUT
+            echo "url=https://pr-$SHA_SHORT-frontend.solitar.workers.dev" >> $GITHUB_OUTPUT
+
+          elif [ "$REF" = "refs/heads/main" ]; then
+            echo "env=staging" >> $GITHUB_OUTPUT
+            echo "url=https://staging.solitar.link" >> $GITHUB_OUTPUT
+
+          else
+            echo "env=production" >> $GITHUB_OUTPUT
+            echo "url=https://solitar.link" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          cache: pnpm
+
+      - name: Install dependencies
+        working-directory: ./apps/frontend
+        run: pnpm install
+
+      - name: Build
+        working-directory: ./apps/frontend
+        run: pnpm build
+
+      - name: Deploy Cloudflare Worker
+        id: wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: ${{ steps.metadata.outputs.env != 'production' && steps.metadata.outputs.env || '' }}
+          workingDirectory: ./apps/frontend
+          packageManager: pnpm
+          wranglerVersion: "4.65.0"
+          command: ${{ steps.metadata.outputs.cmd }}
+
+      - name: Purge cache
+        if: github.ref == 'refs/heads/prod'
+        run: |
+          curl https://api.cloudflare.com/client/v4/zones/4ede5084774dc489678f0cf9695497b5/purge_cache \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -d '{
+              "hosts": [
+                "www.solitar.link",
+                "solitar.link",
+                "staging.solitar.link"
+              ]
+            }'
+
+      - name: Capture deployment URLs
+        if: ${{ inputs.environment != '' }}
+        run: |
+          echo "${{ steps.metadata.outputs.url }}" > deployment-url-${{ inputs.environment }}.txt
+
+      - name: Upload deployment URLs
+        if: ${{ inputs.environment != '' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: deployment-url-${{ inputs.environment }}
+          path: deployment-url-${{ inputs.environment }}.txt

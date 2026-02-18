@@ -1,0 +1,12 @@
+spring:
+  application:
+    version: 1.0.0-dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+app:
+  cors:
+    allowed-origins:
+      - "http://localhost:3000"
+      - "https://staging.solitar.link"

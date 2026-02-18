@@ -1,0 +1,11 @@
+spring:
+  application:
+    version: 1.0.0-prod
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+app:
+  cors:
+    allowed-origins:
+      - "https://solitar.link"
