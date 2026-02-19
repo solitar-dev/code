@@ -1,8 +1,0 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
-
-@theme {
-	--font-sans: "Geist", system-ui, sans-serif;
-	--font-mono: "JetBrains Mono", monospace;
-	--font-brand: "Orbitron", sans-serif;
-}
