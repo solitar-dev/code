@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const route = useRoute();
 
+useHead({
+	title: "Contents",
+});
+
 const availableRoutes = new Map([
 	["terms", "Terms & Conditions"],
 	["privacy", "Privacy Policy"],
