@@ -6,6 +6,10 @@ defineOgImageComponent("BasicTemplate", {
 	description: "Generate a QR code for your URL",
 });
 
+definePageMeta({
+	title: "QR Code Generator",
+});
+
 const { r$ } = useQrCodeForm();
 const overlay = useOverlay();
 
