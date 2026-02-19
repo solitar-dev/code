@@ -50,4 +50,7 @@ export default defineNuxtConfig({
 		blockAiBots: true,
 		blockNonSeoBots: true,
 	},
+	schemaOrg: {
+		enabled: false,
+	},
 });
