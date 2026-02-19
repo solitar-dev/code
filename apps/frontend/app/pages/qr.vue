@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { QrCodeDisplay } from "#components";
 
+defineOgImageComponent("BasicTemplate", {
+	title: "QR Code Generator",
+	description: "Generate a QR code for your URL",
+});
+
 const { r$ } = useQrCodeForm();
 const overlay = useOverlay();
 
