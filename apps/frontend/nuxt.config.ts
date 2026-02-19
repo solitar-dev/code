@@ -1,5 +1,12 @@
 export default defineNuxtConfig({
-	modules: ["@nuxt/ui", "@regle/nuxt", "@vueuse/nuxt", "@nuxt/image", "@nuxt/test-utils/module"],
+	modules: [
+		"@nuxt/ui",
+		"@regle/nuxt",
+		"@vueuse/nuxt",
+		"@nuxt/image",
+		"@nuxt/test-utils/module",
+		"@nuxtjs/seo",
+	],
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
 	css: ["~/assets/css/global.css"],
@@ -12,7 +19,7 @@ export default defineNuxtConfig({
 	},
 	app: {
 		head: {
-			title: "Solitär",
+			title: "Solitar",
 			meta: [{ name: "description", content: "A minimal URL shortener and QR generator" }],
 			link: [
 				{
@@ -38,5 +45,9 @@ export default defineNuxtConfig({
 		cloudflare: {
 			nodeCompat: true,
 		},
+	},
+	robots: {
+		blockAiBots: true,
+		blockNonSeoBots: true,
 	},
 });
