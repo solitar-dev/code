@@ -7,5 +7,6 @@
 		</UMain>
 
 		<USeparator />
+		<Footer />
 	</UApp>
 </template>
