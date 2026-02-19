@@ -41,6 +41,15 @@ export default defineNuxtConfig({
 			nodeCompat: true,
 		},
 	},
+	fonts: {
+		families: [
+			{
+				name: "Geist",
+				provider: "google",
+				global: true,
+			},
+		],
+	},
 	ui: {
 		fonts: false,
 	},

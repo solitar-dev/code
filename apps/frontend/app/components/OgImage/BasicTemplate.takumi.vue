@@ -12,7 +12,9 @@ const props = withDefaults(
 </script>
 
 <template>
-	<div class="bg-black w-full h-full flex items-center justify-center flex-col">
+	<div
+		class="bg-black w-full h-full flex items-center justify-center flex-col"
+		:style="`font-family: 'Geist', sans-serif`">
 		<div class="w-full h-full p-16 flex items-start justify-center flex-col gap-28">
 			<p class="text-white text-6xl">{{ title }}</p>
 			<p class="text-[#a1a1a1] text-5xl">{{ description }}</p>
