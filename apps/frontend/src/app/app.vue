@@ -9,7 +9,7 @@ const runtimeConfig = useRuntimeConfig();
 <template>
 	<UApp :toaster="toaster">
 		<UBanner
-			v-if="runtimeConfig.preview"
+			v-if="runtimeConfig.public.preview"
 			icon="i-carbon:warning-alt"
 			title="Your are viewing Solitar's staging environment"
 			color="warning" />

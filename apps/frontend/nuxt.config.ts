@@ -7,7 +7,9 @@ export default defineNuxtConfig({
 	},
 	// Runtime
 	runtimeConfig: {
-		preview: true,
+		public: {
+			preview: true,
+		},
 	},
 	// Development
 	compatibilityDate: "2025-07-15",
