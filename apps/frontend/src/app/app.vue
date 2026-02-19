@@ -1,5 +1,11 @@
 <template>
 	<UApp>
-		<NuxtPage />
+		<Header />
+
+		<UMain>
+			<NuxtPage />
+		</UMain>
+
+		<USeparator />
 	</UApp>
 </template>

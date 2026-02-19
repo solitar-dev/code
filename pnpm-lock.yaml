@@ -25,6 +25,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@iconify-json/carbon':
+        specifier: ^1.2.18
+        version: 1.2.18
       '@nuxt/ui':
         specifier: ^4.4.0
         version: 4.4.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.9.2)(magicast@0.5.2)(tailwindcss@4.2.0)(typescript@5.9.2)(vite@7.3.1(@types/node@25.2.2)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.28(typescript@5.9.2)))(vue@3.5.28(typescript@5.9.2))(yjs@13.6.29)
@@ -538,6 +541,9 @@ packages:
 
   '@floating-ui/vue@1.1.10':
     resolution: {integrity: sha512-vdf8f6rHnFPPLRsmL4p12wYl+Ux4mOJOkjzKEMYVnwdf7UFdvBtHlLvQyx8iKG5vhPRbDRgZxdtpmyigDPjzYg==}
+
+  '@iconify-json/carbon@1.2.18':
+    resolution: {integrity: sha512-Grb13E6r/RqTEV4Sqd/BQR2FUt57U2WLuticJ5H8JbTdHLop1LmdePu3EJJA3Xi8DcWRbD6OnC133hKfOwlgtg==}
 
   '@iconify/collections@1.0.652':
     resolution: {integrity: sha512-RJhGvFA27VPidZPewkSPHncr1NgAo7qnaO+aUA2vEfFTnYvAfVoZGn1CPIK1y2J+N+3w/KHpEHAEf1pQAHiNDQ==}
@@ -5056,6 +5062,10 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@iconify-json/carbon@1.2.18':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify/collections@1.0.652':
     dependencies:

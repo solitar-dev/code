@@ -12,6 +12,7 @@
 		"lint:fix": "oxlint --fix"
 	},
 	"dependencies": {
+		"@iconify-json/carbon": "^1.2.18",
 		"@nuxt/ui": "^4.4.0",
 		"nuxt": "^4.3.1",
 		"tailwindcss": "^4.2.0",

@@ -6,3 +6,7 @@
 	--font-mono: "JetBrains Mono", monospace;
 	--font-brand: "Orbitron", sans-serif;
 }
+
+:root {
+	--ui-radius: 0.375rem;
+}
