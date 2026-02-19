@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { QrCodeDisplay } from "#components";
 
-defineOgImageComponent("BasicTemplate", {
+defineOgImage("BasicTemplate", {
 	title: "QR Code Generator",
 	description: "Generate a QR code for your URL",
 });
 
-definePageMeta({
+useHead({
 	title: "QR Code Generator",
 });
 

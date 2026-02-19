@@ -1,11 +1,15 @@
 export default defineNuxtConfig({
 	modules: [
 		"@nuxt/ui",
+		"@nuxt/fonts",
 		"@regle/nuxt",
 		"@vueuse/nuxt",
 		"@nuxt/image",
 		"@nuxt/test-utils/module",
-		"@nuxtjs/seo",
+		"nuxt-og-image",
+		"@nuxtjs/robots",
+		"@nuxtjs/sitemap",
+		"nuxt-seo-utils",
 	],
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
@@ -19,6 +23,11 @@ export default defineNuxtConfig({
 	},
 	app: {
 		head: {
+			titleTemplate: "%s %separator %siteName",
+			templateParams: {
+				separator: "|",
+				siteName: "Solitar",
+			},
 			title: "Solitar",
 			meta: [{ name: "description", content: "A minimal URL shortener and QR generator" }],
 		},
@@ -32,11 +41,25 @@ export default defineNuxtConfig({
 			nodeCompat: true,
 		},
 	},
+	ui: {
+		fonts: false,
+	},
+	site: {
+		name: "Solitar",
+	},
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
 	},
-	schemaOrg: {
-		enabled: false,
+	ogImage: {
+		buildCache: true,
+		compatibility: {
+			runtime: {
+				takumi: "wasm",
+			},
+		},
+	},
+	seo: {
+		fallbackTitle: false,
 	},
 });

@@ -2,7 +2,10 @@
 import { joinURL } from "ufo";
 import { ShortenUrlDisplay } from "#components";
 
-defineOgImageComponent("BasicTemplate");
+defineOgImage("BasicTemplate");
+useHead({
+	title: "URL Shortener",
+});
 
 const { r$ } = useShortenForm();
 const config = useRuntimeConfig();
