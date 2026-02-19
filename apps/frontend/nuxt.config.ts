@@ -1,5 +1,16 @@
 export default defineNuxtConfig({
-	modules: ["@nuxt/ui", "@regle/nuxt", "@vueuse/nuxt", "@nuxt/image", "@nuxt/test-utils/module"],
+	modules: [
+		"@nuxt/ui",
+		"@nuxt/fonts",
+		"@regle/nuxt",
+		"@vueuse/nuxt",
+		"@nuxt/image",
+		"@nuxt/test-utils/module",
+		"nuxt-og-image",
+		"@nuxtjs/robots",
+		"@nuxtjs/sitemap",
+		"nuxt-seo-utils",
+	],
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
 	css: ["~/assets/css/global.css"],
@@ -12,22 +23,13 @@ export default defineNuxtConfig({
 	},
 	app: {
 		head: {
-			title: "Solitär",
+			titleTemplate: "%s %separator %siteName",
+			templateParams: {
+				separator: "|",
+				siteName: "Solitar",
+			},
+			title: "Solitar",
 			meta: [{ name: "description", content: "A minimal URL shortener and QR generator" }],
-			link: [
-				{
-					rel: "icon",
-					type: "image/svg+xml",
-					href: "/favicon-light.svg",
-					media: "(prefers-color-scheme: light)",
-				},
-				{
-					rel: "icon",
-					type: "image/svg+xml",
-					href: "/favicon-dark.svg",
-					media: "(prefers-color-scheme: dark)",
-				},
-			],
 		},
 	},
 	nitro: {
@@ -38,5 +40,35 @@ export default defineNuxtConfig({
 		cloudflare: {
 			nodeCompat: true,
 		},
+	},
+	fonts: {
+		families: [
+			{
+				name: "Geist",
+				provider: "google",
+				global: true,
+			},
+		],
+	},
+	ui: {
+		fonts: false,
+	},
+	site: {
+		name: "Solitar",
+	},
+	robots: {
+		blockAiBots: true,
+		blockNonSeoBots: true,
+	},
+	ogImage: {
+		buildCache: true,
+		compatibility: {
+			runtime: {
+				takumi: "wasm",
+			},
+		},
+	},
+	seo: {
+		fallbackTitle: false,
 	},
 });

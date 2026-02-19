@@ -1,6 +1,11 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - apps/*
+  - packages/*
 
-onlyBuiltDependencies:
-  - "lefthook"
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  lefthook: true
+  sharp: true
+  vue-demi: true
+  workerd: true
