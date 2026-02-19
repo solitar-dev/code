@@ -5,6 +5,10 @@ export default defineNuxtConfig({
 	dir: {
 		public: "src/public",
 	},
+	// Runtime
+	runtimeConfig: {
+		preview: true,
+	},
 	// Development
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },

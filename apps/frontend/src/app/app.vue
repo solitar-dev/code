@@ -2,10 +2,17 @@
 import type { ToasterProps } from "@nuxt/ui";
 
 const toaster: ToasterProps = { position: "top-right" };
+
+const runtimeConfig = useRuntimeConfig();
 </script>
 
 <template>
 	<UApp :toaster="toaster">
+		<UBanner
+			v-if="runtimeConfig.preview"
+			icon="i-carbon:warning-alt"
+			title="Your are viewing Solitar's staging environment"
+			color="warning" />
 		<Header />
 
 		<UMain>

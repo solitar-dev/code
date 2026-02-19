@@ -12,7 +12,6 @@
 		"lint:fix": "oxlint --fix"
 	},
 	"dependencies": {
-		"@iconify-json/carbon": "^1.2.18",
 		"@nuxt/ui": "^4.4.0",
 		"nuxt": "^4.3.1",
 		"tailwindcss": "^4.2.0",
@@ -20,6 +19,8 @@
 		"vue-router": "^4.6.4"
 	},
 	"devDependencies": {
+		"@iconify-json/carbon": "^1.2.18",
+		"@iconify-json/lucide": "^1.2.92",
 		"oxlint": "^1.48.0"
 	}
 }
