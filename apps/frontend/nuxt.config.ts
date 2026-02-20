@@ -17,6 +17,11 @@ export default defineNuxtConfig({
 			apiBaseUrl: "",
 		},
 	},
+	// SEO
+	robots: {
+		blockAiBots: true,
+		blockNonSeoBots: true,
+	},
 	// Development
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
