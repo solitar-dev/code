@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as v from "valibot";
 import type { FormSubmitEvent, SelectItem } from "@nuxt/ui";
-import ShortenedUrlModal from "../modal/ShortenedUrlModal.vue";
+import { ShortenedUrlModal } from "#components";
 import { joinURL } from "ufo";
 
 const selectItems: SelectItem[] = [
