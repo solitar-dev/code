@@ -11,6 +11,8 @@
 		<template #footer>
 			<Counter />
 		</template>
+
+		<UrlShortenerForm />
 	</UPageHero>
 
 	<USeparator />
