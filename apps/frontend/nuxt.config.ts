@@ -17,6 +17,16 @@ export default defineNuxtConfig({
 			apiBaseUrl: "",
 		},
 	},
+	// Deploy
+	nitro: {
+		prerender: {
+			autoSubfolderIndex: false,
+		},
+		preset: "cloudflare-module",
+		cloudflare: {
+			nodeCompat: true,
+		},
+	},
 	// SEO
 	robots: {
 		blockAiBots: true,
