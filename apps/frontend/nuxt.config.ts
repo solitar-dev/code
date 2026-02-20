@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-	modules: ["@nuxt/ui"],
+	modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/seo"],
 	css: ["~/assets/css/main.css"],
 	srcDir: "src/app",
 	dir: {
