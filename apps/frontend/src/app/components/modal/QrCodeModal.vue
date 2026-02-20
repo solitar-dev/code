@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useQRCode } from "@vueuse/integrations/useQRCode";
 
-const { url } = defineProps<{
-	url: string;
-}>();
+const { url } = defineProps<{ url: string }>();
 
 const qrcode = computed(() => {
 	return useQRCode(url, { scale: 6 });

@@ -1,37 +1,23 @@
 export default defineNuxtConfig({
-	modules: [
-		"@nuxt/ui",
-		"@nuxt/fonts",
-		"@regle/nuxt",
-		"@vueuse/nuxt",
-		"@nuxt/image",
-		"@nuxt/test-utils/module",
-		"nuxt-og-image",
-		"@nuxtjs/robots",
-		"@nuxtjs/sitemap",
-		"nuxt-seo-utils",
+	modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/seo"],
+	css: ["~/assets/css/main.css"],
+	srcDir: "src/app",
+	dir: {
+		public: "src/public",
+	},
+	components: [
+		{
+			path: "~/components",
+			pathPrefix: false,
+		},
 	],
-	compatibilityDate: "2025-07-15",
-	devtools: { enabled: true },
-	css: ["~/assets/css/global.css"],
+	// Runtime
 	runtimeConfig: {
 		public: {
-			siteUrl: "",
 			apiBaseUrl: "",
-			preview: true,
 		},
 	},
-	app: {
-		head: {
-			titleTemplate: "%s %separator %siteName",
-			templateParams: {
-				separator: "|",
-				siteName: "Solitar",
-			},
-			title: "Solitar",
-			meta: [{ name: "description", content: "A minimal URL shortener and QR generator" }],
-		},
-	},
+	// Deploy
 	nitro: {
 		prerender: {
 			autoSubfolderIndex: false,
@@ -41,34 +27,12 @@ export default defineNuxtConfig({
 			nodeCompat: true,
 		},
 	},
-	fonts: {
-		families: [
-			{
-				name: "Geist",
-				provider: "google",
-				global: true,
-			},
-		],
-	},
-	ui: {
-		fonts: false,
-	},
-	site: {
-		name: "Solitar",
-	},
+	// SEO
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
 	},
-	ogImage: {
-		buildCache: true,
-		compatibility: {
-			runtime: {
-				takumi: "wasm",
-			},
-		},
-	},
-	seo: {
-		fallbackTitle: false,
-	},
+	// Development
+	compatibilityDate: "2025-07-15",
+	devtools: { enabled: true },
 });
