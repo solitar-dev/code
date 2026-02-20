@@ -14,6 +14,7 @@ export default defineNuxtConfig({
 	// Runtime
 	runtimeConfig: {
 		public: {
+			apiBaseUrl: "",
 			preview: true,
 		},
 	},
