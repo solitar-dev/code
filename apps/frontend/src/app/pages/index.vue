@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHead({
+	title: "URL Shortener",
+});
+</script>
 
 <template>
 	<UPageHero
