@@ -19,10 +19,10 @@ export type UrlShortenerBody = {
 
 export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
 	async getStatisticData(): Promise<StatisticData> {
-		return fetch("/statistics");
+		return fetch<StatisticData>("/statistics");
 	},
 	async shortenUrl(body: UrlShortenerBody): Promise<UrlShortenerResponse> {
-		return fetch("/create", {
+		return fetch<UrlShortenerResponse>("/create", {
 			method: "post",
 			body,
 		});
