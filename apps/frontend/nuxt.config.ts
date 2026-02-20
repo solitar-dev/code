@@ -5,6 +5,12 @@ export default defineNuxtConfig({
 	dir: {
 		public: "src/public",
 	},
+	components: [
+		{
+			path: "~/components",
+			pathPrefix: false,
+		},
+	],
 	// Runtime
 	runtimeConfig: {
 		public: {

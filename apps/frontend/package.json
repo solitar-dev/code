@@ -21,6 +21,7 @@
 	"devDependencies": {
 		"@iconify-json/carbon": "^1.2.18",
 		"@iconify-json/lucide": "^1.2.92",
+		"@iconify-json/tabler": "^1.2.26",
 		"oxlint": "^1.48.0"
 	}
 }
