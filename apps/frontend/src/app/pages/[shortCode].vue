@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { joinURL, parseURL } from "ufo";
+import { parseURL } from "ufo";
 
-const config = useRuntimeConfig();
 const route = useRoute();
+const { $api } = useNuxtApp();
+const urlRepository = repository($api);
 
 const shortCode = route.params.shortCode!.toString();
 
-const { data, error } = await useFetch<{ originalUrl: string }>(
-	joinURL(config.public.apiBaseUrl, "forward", shortCode),
-	{ method: "get", retry: 1 },
-);
+const { data, error } = await useAsyncData(() => urlRepository.getLongUrl(shortCode));
 
 if (error.value) {
+	const e = error.value.data as { error: string; message: string };
+
 	throw createError({
-		statusCode: error.value?.statusCode || 500,
-		statusMessage: error.value?.data?.error || "Internal Server Error",
-		message: error.value?.data?.message || "Failed to resolve short URL",
+		statusCode: error.value?.status || 500,
+		statusMessage: e.error || "Internal Server Error",
+		message: e.message || "Failed to resolve short URL",
 	});
 }
 
-const originalUrl = data.value?.originalUrl!;
+const originalUrl = data.value as string;
 const { protocol } = parseURL(originalUrl);
 const isSecure = protocol === "https:";
 

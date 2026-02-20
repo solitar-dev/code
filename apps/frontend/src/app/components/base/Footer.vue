@@ -57,7 +57,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 
 		<template #right>
 			<UButton
-				icon="i-tabler-brand-github"
+				icon="i-carbon:logo-github"
 				color="neutral"
 				variant="ghost"
 				to="https://github.com/solitar-dev/code"

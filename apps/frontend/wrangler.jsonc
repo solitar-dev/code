@@ -20,9 +20,10 @@
 	},
 	"keep_vars": false,
 	"vars": {
-		"NUXT_PUBLIC_SITE_URL": "https://solitar.link",
+		"NUXT_SITE_URL": "https://solitar.link",
 		"NUXT_PUBLIC_API_BASE_URL": "https://api.solitar.link",
-		"NUXT_PUBLIC_PREVIEW": false,
+		"NUXT_SITE_ENV": "production",
+		"NUXT_SITE_NAME": "Solitar",
 	},
 	"env": {
 		"staging": {
@@ -32,9 +33,10 @@
 			},
 			"routes": [{ "pattern": "staging.solitar.link", "custom_domain": true }],
 			"vars": {
-				"NUXT_PUBLIC_SITE_URL": "https://staging.solitar.link",
+				"NUXT_SITE_URL": "https://staging.solitar.link",
 				"NUXT_PUBLIC_API_BASE_URL": "https://staging-api.solitar.link",
-				"NUXT_PUBLIC_PREVIEW": true,
+				"NUXT_SITE_ENV": "staging",
+				"NUXT_SITE_NAME": "Solitar Staging",
 			},
 		},
 	},

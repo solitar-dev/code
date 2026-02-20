@@ -25,25 +25,25 @@ const type = computed(() => {
 const items = computed(() => [
 	[
 		{
-			icon: "i-tabler-file-description",
+			icon: "i-carbon:document",
 			label: availableRoutes.get("terms"),
 			active: type.value === "terms",
 			to: "?type=terms",
 		},
 		{
-			icon: "i-tabler-lock",
+			icon: "i-carbon:locked",
 			label: availableRoutes.get("privacy"),
 			active: type.value === "privacy",
 			to: "?type=privacy",
 		},
 		{
-			icon: "i-tabler-flag-exclamation",
+			icon: "i-tabler:flag-exclamation",
 			label: availableRoutes.get("spam"),
 			active: type.value === "spam",
 			to: "?type=spam",
 		},
 		{
-			icon: "i-tabler-message-report",
+			icon: "i-tabler:message-report",
 			label: availableRoutes.get("report"),
 			active: type.value === "report",
 			to: "?type=report",

@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { joinURL } from "ufo";
+const { $api } = useNuxtApp();
+const statisticRepo = repository($api);
 
-const config = useRuntimeConfig();
+const { pending, data } = await useAsyncData(() => statisticRepo.getStatisticData());
 
-const { data, pending } = await useLazyFetch<{
-	totalClicks: number;
-	totalLinks: number;
-}>(joinURL(config.public.apiBaseUrl, "statistics"), {
-	method: "get",
-});
-
-const totalLinks = computed(() => data.value?.totalLinks || 0);
-const totalClicks = computed(() => data.value?.totalClicks || 0);
+const totalLinks = data.value?.totalLinks ?? 0;
+const totalClicks = data.value?.totalClicks ?? 0;
 </script>
 
 <template>

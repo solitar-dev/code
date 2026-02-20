@@ -18,6 +18,7 @@ build
 .nuxt
 .kotlin
 .wrangler
+.data
 
 # IntelliJ
 .idea/

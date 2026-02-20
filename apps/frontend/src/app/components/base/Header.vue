@@ -7,19 +7,19 @@ const items = computed<NavigationMenuItem[]>(() => [
 	{
 		label: "Shorten URL",
 		to: "/",
-		icon: "i-tabler-link",
+		icon: "i-carbon:link",
 		active: route.path === "/",
 	},
 	{
 		label: "Generate QR",
 		to: "/qr",
-		icon: "i-tabler-qrcode",
+		icon: "i-carbon:qr-code",
 		active: route.path === "/qr",
 	},
 	{
 		label: "API",
 		to: "https://docs.solitar.link",
-		icon: "i-tabler-app-window",
+		icon: "i-carbon:api",
 		target: "_blank",
 	},
 ]);
@@ -35,7 +35,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 
 		<template #right>
 			<UButton
-				icon="i-tabler-brand-github"
+				icon="i-carbon:logo-github"
 				color="neutral"
 				variant="ghost"
 				to="https://github.com/solitar-dev/code"

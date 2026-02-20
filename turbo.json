@@ -6,7 +6,7 @@
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": [".output/**", "build/**"],
-			"env": ["SPRING_PROFILES_ACTIVE", "SITE_URL", "PUBLIC_BASE_URL", "PUBLIC_BACKEND_URL"]
+			"env": ["SPRING_PROFILES_ACTIVE"]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
@@ -18,16 +18,18 @@
 			"cache": false,
 			"persistent": true,
 			"env": [
+				// Backend
 				"SPRING_PROFILES_ACTIVE",
-				"SITE_URL",
 				"SERVER_PORT",
 				"DATABASE_URL",
 				"DATABASE_USERNAME",
 				"DATABASE_PASSWORD",
 				"REDIS_URL",
-				"PUBLIC_BASE_URL",
-				"PUBLIC_BACKEND_URL",
-				"PUBLIC_PREVIEW"
+				// Frontend
+				"PUBLIC_API_BASE_URL",
+				"SITE_URL",
+				"SITE_NAME",
+				"SITE_ENV"
 			]
 		},
 		"test": {
