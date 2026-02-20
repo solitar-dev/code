@@ -1,4 +1,5 @@
 import type { $Fetch, NitroFetchRequest } from "nitropack";
+import { joinURL } from "ufo";
 
 type StatisticData = {
 	totalLinks: number;
@@ -25,5 +26,10 @@ export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
 			method: "post",
 			body,
 		});
+	},
+	async getLongUrl(shortCode: string): Promise<string> {
+		const data = await fetch<{ originalUrl: string }>(joinURL("/forward", shortCode));
+
+		return data.originalUrl;
 	},
 });
