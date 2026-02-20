@@ -15,7 +15,6 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			apiBaseUrl: "",
-			preview: true,
 		},
 	},
 	// Development

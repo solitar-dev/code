@@ -3,13 +3,13 @@ import type { ToasterProps } from "@nuxt/ui";
 
 const toaster: ToasterProps = { position: "top-right" };
 
-const runtimeConfig = useRuntimeConfig();
+const siteConfig = useSiteConfig();
 </script>
 
 <template>
 	<UApp :toaster="toaster">
 		<UBanner
-			v-if="runtimeConfig.public.preview"
+			v-if="siteConfig.env === 'staging'"
 			icon="i-carbon:warning-alt"
 			title="Your are viewing Solitar's staging environment"
 			color="warning" />
