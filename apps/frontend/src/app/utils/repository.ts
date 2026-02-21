@@ -14,7 +14,7 @@ type UrlShortenerResponse = {
 export type UrlShortenerBody = {
 	url: string;
 	alias?: string;
-	expiresTime?: string;
+	expireTime?: string;
 };
 
 export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
