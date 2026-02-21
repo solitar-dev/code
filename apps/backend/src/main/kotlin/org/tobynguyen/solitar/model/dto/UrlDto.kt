@@ -14,7 +14,7 @@ data class UrlCreateDto(
             "^https?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*$",
     )
     val url: String,
-    @field:Future(message = "Expiration time must be in the future") val expiresTime: Instant?,
+    @field:Future(message = "Expiration time must be in the future") val expireTime: Instant?,
     @field:Size(message = "Alias must be longer than 7 characters", min = 7)
     @field:Size(message = "Alias cannot exceed 255 characters", max = 255)
     @field:Pattern(

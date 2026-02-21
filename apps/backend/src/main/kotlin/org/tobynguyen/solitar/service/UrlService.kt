@@ -1,7 +1,6 @@
 package org.tobynguyen.solitar.service
 
 import java.time.Instant
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.sqids.Sqids
@@ -36,23 +35,48 @@ class UrlService(private val urlRepository: UrlRepository, private val sqids: Sq
 
     @Transactional
     fun createUrl(data: UrlCreateDto): UrlEntity {
+        val (url, expireTime, alias) = data
 
-        if (data.alias == null) {
-            val existing =
-                urlRepository.findByOriginalUrl(data.url).firstOrNull {
-                    (it.expiresAt == null || it.expiresAt!!.isAfter(Instant.now())) && !it.hasAlias
+        if (alias != null) {
+            val existing = urlRepository.findByShortCode(alias)
+
+            return if (existing != null) {
+                if (existing.originalUrl == url && existing.expiresAt == expireTime) {
+                    existing
+                } else {
+                    throw UrlShortCodeConflictedException("This alias already exists.")
                 }
-
-            if (existing != null) {
-                if (existing.isDisabled) {
-                    throw UrlDisabledException("We cannot shorten this URL")
-                }
-
-                return existing
+            } else {
+                createAndSaveUrl(url, alias, expireTime)
             }
+        } else {
+            if (expireTime == null) {
+                val existing =
+                    urlRepository.findByOriginalUrlAndExpiresAtIsNullAndHasAliasFalse(url)
 
+                return existing ?: createAndSaveUrl(url, null, null)
+            } else {
+                val existing =
+                    urlRepository.findByOriginalUrlAndExpiresAtAndHasAliasFalse(url, expireTime)
+
+                return existing ?: createAndSaveUrl(url, null, expireTime)
+            }
+        }
+    }
+
+    fun createAndSaveUrl(url: String, alias: String?, expireTime: Instant?): UrlEntity {
+        if (alias != null) {
             val entity =
-                UrlEntity(shortCode = "", originalUrl = data.url, expiresAt = data.expiresTime)
+                UrlEntity(
+                    shortCode = alias,
+                    originalUrl = url,
+                    expiresAt = expireTime,
+                    hasAlias = true,
+                )
+
+            return urlRepository.saveAndFlush(entity)
+        } else {
+            val entity = UrlEntity(shortCode = "", originalUrl = url, expiresAt = expireTime)
 
             val savedEntity = urlRepository.save(entity)
 
@@ -61,20 +85,6 @@ class UrlService(private val urlRepository: UrlRepository, private val sqids: Sq
             savedEntity.shortCode = generatedCode
 
             return savedEntity
-        } else {
-            val entity =
-                UrlEntity(
-                    shortCode = data.alias,
-                    originalUrl = data.url,
-                    expiresAt = data.expiresTime,
-                    hasAlias = true,
-                )
-
-            try {
-                return urlRepository.saveAndFlush(entity)
-            } catch (e: DataIntegrityViolationException) {
-                throw UrlShortCodeConflictedException("This alias already exists.")
-            }
         }
     }
 }
