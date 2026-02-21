@@ -81,7 +81,7 @@ async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
 		url: longUrl,
 		alias,
 		...(!neverExpire && {
-			expiresTime: generateExpireTime(event.data.expireTime, event.data.expireUnit),
+			expireTime: generateExpireTime(event.data.expireTime, event.data.expireUnit),
 		}),
 	};
 
