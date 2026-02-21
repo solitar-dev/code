@@ -1,5 +1,6 @@
 package org.tobynguyen.solitar.repository
 
+import java.time.Instant
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -10,7 +11,12 @@ interface UrlRepository : JpaRepository<UrlEntity, Long> {
     @Cacheable(value = ["urlEntities"], key = "#shortCode", unless = "#result == null")
     fun findByShortCode(shortCode: String): UrlEntity?
 
-    fun findByOriginalUrl(originalUrl: String): List<UrlEntity>
+    fun findByOriginalUrlAndExpiresAtAndHasAliasFalse(
+        originalUrl: String,
+        expiresAt: Instant,
+    ): UrlEntity?
+
+    fun findByOriginalUrlAndExpiresAtIsNullAndHasAliasFalse(originalUrl: String): UrlEntity?
 
     @Modifying
     @Query("UPDATE UrlEntity u SET u.clickCount = u.clickCount + 1 WHERE u.id = :id")
