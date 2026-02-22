@@ -25,10 +25,15 @@ data class UrlCreateDto(
     @field:Size(message = "Password must be at least 3 characters", min = 3)
     @field:Size(message = "Password cannot exceed 255 characters", max = 255)
     val password: String?,
-) {}
+)
 
-data class UrlResponseDto(val originalUrl: String, val shortCode: String) {}
+data class UrlResponseDto(val originalUrl: String, val shortCode: String)
 
-data class UrlForwardResponseDto(val originalUrl: String) {}
+data class UrlForwardResponseDto(val originalUrl: String)
 
-data class UrlForwardDto(val shortCode: String, val password: String?)
+data class UrlForwardDto(
+    @field:NotBlank(message = "Short code is required") val shortCode: String,
+    @field:Size(message = "Password must be at least 3 characters", min = 3)
+    @field:Size(message = "Password cannot exceed 255 characters", max = 255)
+    val password: String?,
+)
