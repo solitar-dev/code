@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import * as v from "valibot";
 import type { FormSubmitEvent, SelectItem } from "@nuxt/ui";
 import { ShortenedUrlModal } from "#components";
 import { joinURL } from "ufo";
+import { type } from "arktype";
 
 const selectItems: SelectItem[] = [
 	{
@@ -35,38 +35,22 @@ const selectItems: SelectItem[] = [
 	},
 ];
 
-const schema = v.object({
-	longUrl: v.pipe(
-		v.string(),
-		v.regex(
-			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
-			"Invalid URL",
-		),
-	),
-	alias: v.optional(
-		v.pipe(
-			v.string(),
-			v.regex(/^[a-zA-Z0-9_-]*$/, "Invalid alias"),
-			v.minLength(7, "Alias must be at least 7 characters"),
-			v.maxLength(255, "Alias is too long"),
-		),
-	),
-	password: v.optional(
-		v.pipe(
-			v.string(),
-			v.minLength(3, "Password must be at least 3 characters"),
-			v.maxLength(255, "Password is too long"),
-		),
-	),
-	neverExpire: v.boolean(),
-	expireTime: v.number(),
-	expireUnit: v.pipe(v.string(), v.picklist(expireUnits)),
+const schema = type({
+	longUrl:
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
+	"alias?": "'' | 7 <= string <= 255",
+	"password?": "'' | 3 <= string <= 255",
+	neverExpire: "boolean",
+	expireTime: "number",
+	expireUnit: "'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'",
 });
 
-const state = ref({
+type Schema = typeof schema.infer;
+
+const state = ref<Schema>({
 	longUrl: "",
-	alias: undefined,
-	password: undefined,
+	alias: "",
+	password: "",
 	neverExpire: true,
 	expireTime: 30,
 	expireUnit: "second",
@@ -80,15 +64,15 @@ const siteConfig = useSiteConfig();
 
 const modal = overlay.create(ShortenedUrlModal);
 
-async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
+async function onSubmit(event: FormSubmitEvent<Schema>) {
 	event.preventDefault();
 
 	const { longUrl, alias, neverExpire, password } = event.data;
 
 	const body: UrlShortenerBody = {
 		url: longUrl,
-		alias,
-		password,
+		alias: alias === "" ? undefined : alias,
+		password: password === "" ? undefined : password,
 		...(!neverExpire && {
 			expireTime: generateExpireTime(event.data.expireTime, event.data.expireUnit),
 		}),
@@ -106,8 +90,8 @@ async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
 			});
 		} else {
 			toast.add({
-				title: error.data.error,
-				description: error.data.message,
+				title: error.data.title,
+				description: error.data.detail,
 				color: "error",
 			});
 		}
