@@ -28,6 +28,11 @@ export default defineNuxtConfig({
 		},
 	},
 	// SEO
+	site: {
+		name: "",
+		url: "",
+		env: "",
+	},
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
