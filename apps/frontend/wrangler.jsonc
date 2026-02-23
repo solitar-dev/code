@@ -29,7 +29,7 @@
 		"staging": {
 			"observability": {
 				"enabled": true,
-				"head_sampling_rate": 0.1,
+				"head_sampling_rate": 1,
 			},
 			"routes": [{ "pattern": "staging.solitar.link", "custom_domain": true }],
 			"vars": {
