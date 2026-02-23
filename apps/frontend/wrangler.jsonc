@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"compatibility_date": "2025-07-15",
 	"name": "frontend",
-	"compatibility_flags": ["nodejs_compat", "no_nodejs_compat_v2"],
+	"compatibility_flags": ["nodejs_compat"],
 	"main": "./.output/server/index.mjs",
 	"assets": {
 		"binding": "ASSETS",
