@@ -35,6 +35,10 @@ class UrlExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail)
     }
 
+    @ExceptionHandler(UrlProtectedException::class)
+    fun onUrlProtected(e: UrlProtectedException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.message)
+
     @ExceptionHandler(UrlNotFoundException::class)
     fun onUrlNotFound(e: UrlNotFoundException) =
         ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message)
