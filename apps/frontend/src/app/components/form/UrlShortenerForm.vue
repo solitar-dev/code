@@ -51,6 +51,13 @@ const schema = v.object({
 			v.maxLength(255, "Alias is too long"),
 		),
 	),
+	password: v.optional(
+		v.pipe(
+			v.string(),
+			v.minLength(3, "Password must be at least 3 characters"),
+			v.maxLength(255, "Password is too long"),
+		),
+	),
 	neverExpire: v.boolean(),
 	expireTime: v.number(),
 	expireUnit: v.pipe(v.string(), v.picklist(expireUnits)),
@@ -59,6 +66,7 @@ const schema = v.object({
 const state = ref({
 	longUrl: "",
 	alias: undefined,
+	password: undefined,
 	neverExpire: true,
 	expireTime: 30,
 	expireUnit: "second",
@@ -75,11 +83,12 @@ const modal = overlay.create(ShortenedUrlModal);
 async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
 	event.preventDefault();
 
-	const { longUrl, alias, neverExpire } = event.data;
+	const { longUrl, alias, neverExpire, password } = event.data;
 
 	const body: UrlShortenerBody = {
 		url: longUrl,
 		alias,
+		password,
 		...(!neverExpire && {
 			expireTime: generateExpireTime(event.data.expireTime, event.data.expireUnit),
 		}),
@@ -126,6 +135,10 @@ async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
 						class="w-full"
 						size="xl"
 						v-model="state.alias" />
+				</UFormField>
+
+				<UFormField label="Password" name="password" hint="Optional">
+					<UInput type="password" class="w-full" size="xl" v-model="state.password" />
 				</UFormField>
 
 				<div class="">

@@ -7,7 +7,7 @@ const urlRepository = repository($api);
 
 const shortCode = route.params.shortCode!.toString();
 
-const { data, error } = await useAsyncData(() => urlRepository.getLongUrl(shortCode));
+const { data, error } = await useAsyncData(() => urlRepository.getLongUrl({ shortCode }));
 
 if (error.value) {
 	const e = error.value.data as { error: string; message: string };

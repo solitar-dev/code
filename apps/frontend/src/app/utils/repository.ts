@@ -14,7 +14,13 @@ type UrlShortenerResponse = {
 export type UrlShortenerBody = {
 	url: string;
 	alias?: string;
+	password?: string;
 	expireTime?: string;
+};
+
+type GetLongUrlBody = {
+	shortCode: string;
+	password?: string;
 };
 
 export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
@@ -27,8 +33,11 @@ export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
 			body,
 		});
 	},
-	async getLongUrl(shortCode: string): Promise<string> {
-		const data = await fetch<{ originalUrl: string }>(joinURL("/forward", shortCode));
+	async getLongUrl(body: GetLongUrlBody): Promise<string> {
+		const data = await fetch<{ originalUrl: string }>("/forward", {
+			method: "post",
+			body,
+		});
 
 		return data.originalUrl;
 	},

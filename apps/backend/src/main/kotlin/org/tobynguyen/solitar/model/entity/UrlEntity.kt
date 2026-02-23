@@ -16,12 +16,13 @@ class UrlEntity(
     @Column(nullable = false, unique = true) @field:Size(min = 7) var shortCode: String = "",
     @Column(nullable = false) var hasAlias: Boolean = false,
     @Column(nullable = false, columnDefinition = "TEXT") var originalUrl: String = "",
+    @Column(nullable = true, columnDefinition = "TEXT") var password: String? = null,
     @Column(nullable = false, name = "click_count") var clickCount: Long = 0,
     @Column(nullable = false, name = "is_disabled")
     @field:JsonProperty("isDisabled")
     var isDisabled: Boolean = false,
+    @Column(nullable = true, name = "expires_at") var expiresAt: Instant? = null,
     @Column(nullable = false, name = "created_at")
     @CreationTimestamp
     var createdAt: Instant = Instant.now(),
-    @Column(nullable = true, name = "expires_at") var expiresAt: Instant? = null,
 ) {}
