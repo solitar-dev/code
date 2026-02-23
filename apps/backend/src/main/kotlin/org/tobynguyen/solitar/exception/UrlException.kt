@@ -7,3 +7,5 @@ class UrlExpiredException(override val message: String) : RuntimeException(messa
 class UrlDisabledException(override val message: String) : RuntimeException(message)
 
 class UrlShortCodeConflictedException(override val message: String) : RuntimeException(message)
+
+class UrlProtectedException(override val message: String) : RuntimeException(message)

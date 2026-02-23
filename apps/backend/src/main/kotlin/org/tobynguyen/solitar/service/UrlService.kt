@@ -8,6 +8,7 @@ import org.sqids.Sqids
 import org.tobynguyen.solitar.exception.UrlDisabledException
 import org.tobynguyen.solitar.exception.UrlExpiredException
 import org.tobynguyen.solitar.exception.UrlNotFoundException
+import org.tobynguyen.solitar.exception.UrlProtectedException
 import org.tobynguyen.solitar.exception.UrlShortCodeConflictedException
 import org.tobynguyen.solitar.mapper.toResponseDto
 import org.tobynguyen.solitar.model.dto.UrlCreateDto
@@ -43,7 +44,7 @@ class UrlService(
             UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
         } else {
             if (password == null)
-                throw UrlDisabledException("Please provide a valid password to unlock this URL.")
+                throw UrlProtectedException("Please provide a valid password to unlock this URL.")
 
             if (argon2Encoder.matches(password, urlEntity.password)) {
                 UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
