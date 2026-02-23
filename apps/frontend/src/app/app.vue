@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ToasterProps } from "@nuxt/ui";
 
+defineOgImageComponent("BasicOG");
+
 const toaster: ToasterProps = { position: "top-right" };
 
 const siteConfig = useSiteConfig();
