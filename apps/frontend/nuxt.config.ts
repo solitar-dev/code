@@ -15,6 +15,11 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			apiBaseUrl: "",
+			site: {
+				name: "",
+				url: "",
+				env: "",
+			},
 		},
 	},
 	// Deploy
@@ -28,11 +33,6 @@ export default defineNuxtConfig({
 		},
 	},
 	// SEO
-	site: {
-		name: "",
-		url: "",
-		env: "",
-	},
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
