@@ -11,6 +11,8 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
+	// Routes
+	routeRules: {},
 	// Runtime
 	runtimeConfig: {
 		public: {
@@ -27,9 +29,6 @@ export default defineNuxtConfig({
 		prerender: {
 			autoSubfolderIndex: false,
 		},
-		experimental: {
-			wasm: true,
-		},
 		preset: "cloudflare-module",
 		cloudflare: {
 			nodeCompat: true,
@@ -39,6 +38,9 @@ export default defineNuxtConfig({
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
+	},
+	ogImage: {
+		enabled: false,
 	},
 	// Development
 	compatibilityDate: "2025-07-15",
