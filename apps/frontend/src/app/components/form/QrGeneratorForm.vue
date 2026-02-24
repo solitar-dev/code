@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { QrCodeModal } from "#components";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import * as v from "valibot";
+import { type } from "arktype";
 
-const schema = v.object({
-	url: v.pipe(v.string("URL is required"), v.url("Invalid URL")),
+const schema = type({
+	url: "string.url",
 });
 
-const state = ref({
-	url: undefined,
+type Schema = typeof schema.infer;
+
+const state = ref<Schema>({
+	url: "",
 });
 
 const overlay = useOverlay();
 const modal = overlay.create(QrCodeModal);
 
-async function onSubmit(event: FormSubmitEvent<v.InferOutput<typeof schema>>) {
+async function onSubmit(event: FormSubmitEvent<Schema>) {
 	event.preventDefault();
 
 	modal.open({

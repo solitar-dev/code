@@ -1,66 +1,57 @@
 package org.tobynguyen.solitar.exception
 
-import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.tobynguyen.solitar.model.dto.ErrorResponse
+import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @RestControllerAdvice
-class UrlExceptionHandler {
+class UrlExceptionHandler : ResponseEntityExceptionHandler() {
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun onValidationFailed(e: MethodArgumentNotValidException): ResponseEntity<Map<String, Any>> {
-        val map = buildMap {
-            e.bindingResult.fieldErrors.forEach {
-                put(it.field, it.defaultMessage ?: "Validation failed")
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest,
+    ): ResponseEntity<Any> {
+        val invalidParams =
+            ex.bindingResult.fieldErrors.map {
+                mapOf("name" to it.field, "reason" to (it.defaultMessage ?: "Validation failed"))
             }
-        }
 
-        return ResponseEntity.badRequest().body(map)
+        val problemDetail =
+            ProblemDetail.forStatusAndDetail(
+                    HttpStatus.BAD_REQUEST,
+                    "The request contained invalid data. Please check the 'invalid_params' array.",
+                )
+                .apply { setProperty("invalid_params", invalidParams) }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail)
     }
 
+    @ExceptionHandler(UrlProtectedException::class)
+    fun onUrlProtected(e: UrlProtectedException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.message)
+
     @ExceptionHandler(UrlNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun onUrlNotFound(e: UrlNotFoundException, request: HttpServletRequest) =
-        ErrorResponse(
-            status = HttpStatus.NOT_FOUND.value(),
-            error = HttpStatus.NOT_FOUND.reasonPhrase,
-            message = e.message,
-            path = request.requestURI,
-        )
+    fun onUrlNotFound(e: UrlNotFoundException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message)
 
     @ExceptionHandler(UrlExpiredException::class)
-    @ResponseStatus(HttpStatus.GONE)
-    fun onUrlExpired(e: UrlExpiredException, request: HttpServletRequest) =
-        ErrorResponse(
-            status = HttpStatus.GONE.value(),
-            error = HttpStatus.GONE.reasonPhrase,
-            message = e.message,
-            path = request.requestURI,
-        )
+    fun onUrlExpired(e: UrlExpiredException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.GONE, e.message)
 
     @ExceptionHandler(UrlDisabledException::class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun onUrlDisabled(e: UrlDisabledException, request: HttpServletRequest) =
-        ErrorResponse(
-            status = HttpStatus.FORBIDDEN.value(),
-            error = HttpStatus.FORBIDDEN.reasonPhrase,
-            message = e.message,
-            path = request.requestURI,
-        )
+    fun onUrlDisabled(e: UrlDisabledException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.message)
 
     @ExceptionHandler(UrlShortCodeConflictedException::class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    fun onUrlShortCodeConflicted(e: UrlShortCodeConflictedException, request: HttpServletRequest) =
-        ErrorResponse(
-            status = HttpStatus.CONFLICT.value(),
-            error = HttpStatus.CONFLICT.reasonPhrase,
-            message = e.message,
-            path = request.requestURI,
-        )
+    fun onUrlShortCodeConflicted(e: UrlShortCodeConflictedException) =
+        ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.message)
 }

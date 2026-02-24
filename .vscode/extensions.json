@@ -1,3 +1,8 @@
 {
-	"recommendations": ["oxc.oxc-vscode"]
+	"recommendations": [
+		"oxc.oxc-vscode",
+		"Vue.volar",
+		"bradlc.vscode-tailwindcss",
+		"arktypeio.arkdark"
+	]
 }

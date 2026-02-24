@@ -3,6 +3,9 @@ spring:
     name: solitar
   main:
     banner-mode: off
+  mvc:
+    problemdetails:
+      enabled: true
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}

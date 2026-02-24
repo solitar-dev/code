@@ -11,10 +11,17 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
+	// Routes
+	routeRules: {},
 	// Runtime
 	runtimeConfig: {
 		public: {
 			apiBaseUrl: "",
+			site: {
+				name: "",
+				url: "",
+				env: "",
+			},
 		},
 	},
 	// Deploy
@@ -31,6 +38,9 @@ export default defineNuxtConfig({
 	robots: {
 		blockAiBots: true,
 		blockNonSeoBots: true,
+	},
+	ogImage: {
+		enabled: false,
 	},
 	// Development
 	compatibilityDate: "2025-07-15",
