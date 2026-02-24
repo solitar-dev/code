@@ -27,6 +27,9 @@ export default defineNuxtConfig({
 		prerender: {
 			autoSubfolderIndex: false,
 		},
+		experimental: {
+			wasm: true,
+		},
 		preset: "cloudflare-module",
 		cloudflare: {
 			nodeCompat: true,
