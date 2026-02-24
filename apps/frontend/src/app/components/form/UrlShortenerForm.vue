@@ -137,7 +137,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 					</div>
 				</UFormField>
 
-				<UButton class="justify-center w-full" size="lg" type="submit" label="Shorten" />
+				<UButton class="w-full justify-center" size="lg" type="submit" label="Shorten" />
 			</UForm>
 		</UCard>
 	</div>

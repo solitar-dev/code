@@ -41,7 +41,7 @@ if (isSecure) {
 </script>
 
 <template>
-	<div class="w-full h-screen grid place-items-center" v-if="!isSecure">
+	<div class="grid h-screen w-full place-items-center" v-if="!isSecure">
 		<SecureWarning :url="originalUrl" />
 	</div>
 </template>

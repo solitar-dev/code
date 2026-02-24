@@ -26,7 +26,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-	<div class="max-w-2xl mx-auto">
+	<div class="mx-auto max-w-2xl">
 		<UPageCard title="QR Code Generator">
 			<UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-5">
 				<UFormField label="URL" name="url" required>
@@ -38,7 +38,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 						v-model="state.url" />
 				</UFormField>
 
-				<UButton class="justify-center w-full" size="lg" type="submit" label="Generate" />
+				<UButton class="w-full justify-center" size="lg" type="submit" label="Generate" />
 			</UForm>
 		</UPageCard>
 	</div>

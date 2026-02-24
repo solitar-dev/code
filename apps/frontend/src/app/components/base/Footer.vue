@@ -30,7 +30,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 <template>
 	<UFooter>
 		<template #left>
-			<p class="text-muted text-sm">
+			<p class="text-sm text-muted">
 				<ULink
 					class="text-default"
 					to="https://github.com/solitar-dev/code/blob/main/LICENSE"

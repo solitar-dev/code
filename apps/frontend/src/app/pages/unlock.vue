@@ -49,8 +49,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-	<div class="grid place-items-center h-screen">
-		<div class="flex flex-col justify-center items-center gap-5">
+	<div class="grid h-screen place-items-center">
+		<div class="flex flex-col items-center justify-center gap-5">
 			<UIcon name="i-carbon:locked" class="size-12 text-warning" />
 			<UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
 				<UPageCard class="max-w-lg" :reverse="false">

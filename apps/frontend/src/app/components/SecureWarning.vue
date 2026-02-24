@@ -12,7 +12,7 @@ const acceptRisk = () => {
 </script>
 
 <template>
-	<div class="flex flex-col justify-center items-center gap-5">
+	<div class="flex flex-col items-center justify-center gap-5">
 		<UIcon name="i-tabler-alert-triangle" class="size-12 text-warning" />
 		<UPageCard class="max-w-lg" :reverse="false">
 			<template #title>

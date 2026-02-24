@@ -8,6 +8,10 @@
 	"bracketSpacing": true,
 	"ignorePatterns": [],
 
+	"sortTailwindcss": {
+		"stylesheet": "./apps/frontend/src/app/assets/css/main.css"
+	},
+
 	"overrides": [
 		{
 			"files": ["*.yml", "*.yaml"],

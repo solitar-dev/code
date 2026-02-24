@@ -6,7 +6,7 @@ useHead({
 
 <template>
 	<UContainer>
-		<div class="w-full mt-24">
+		<div class="mt-24 w-full">
 			<QrGeneratorForm />
 		</div>
 	</UContainer>
