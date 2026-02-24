@@ -36,8 +36,9 @@ const selectItems: SelectItem[] = [
 ];
 
 const schema = type({
-	longUrl:
+	longUrl: type(
 		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
+	).describe("a valid URL"),
 	"alias?": "'' | 7 <= string <= 255",
 	"password?": "'' | 3 <= string <= 255",
 	neverExpire: "boolean",
