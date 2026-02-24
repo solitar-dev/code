@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+	modules: ["@unocss/nuxt", "@nuxt/fonts"],
 	srcDir: "src/app",
 	dir: {
 		public: "src/public",
