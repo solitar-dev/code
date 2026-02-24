@@ -1,48 +1,5 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/seo"],
-	css: ["~/assets/css/main.css"],
-	srcDir: "src/app",
-	dir: {
-		public: "src/public",
-	},
-	components: [
-		{
-			path: "~/components",
-			pathPrefix: false,
-		},
-	],
-	// Routes
-	routeRules: {},
-	// Runtime
-	runtimeConfig: {
-		public: {
-			apiBaseUrl: "",
-			site: {
-				name: "",
-				url: "",
-				env: "",
-			},
-		},
-	},
-	// Deploy
-	nitro: {
-		prerender: {
-			autoSubfolderIndex: false,
-		},
-		preset: "cloudflare-module",
-		cloudflare: {
-			nodeCompat: true,
-		},
-	},
-	// SEO
-	robots: {
-		blockAiBots: true,
-		blockNonSeoBots: true,
-	},
-	ogImage: {
-		enabled: false,
-	},
-	// Development
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
 });
