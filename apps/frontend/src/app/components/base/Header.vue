@@ -25,8 +25,10 @@ const items: NavigationItem[] = [
 
 items.forEach((item) => {
 	onKeyStroke(item.kbd, (e) => {
-		e.preventDefault();
-		navigateTo(item.path);
+		if (!isEditableElement(e.target)) {
+			e.preventDefault();
+			navigateTo(item.path);
+		}
 	});
 });
 
