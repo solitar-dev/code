@@ -24,8 +24,8 @@ export default defineConfig({
 				muted: "var(--bg-muted)",
 			},
 			fg: {
-				DEFAULT: "var(--fg)",
-				muted: "var(--fg-muted)",
+				DEFAULT: "var(--gray-1000)",
+				muted: "var(--gray-900)",
 			},
 			border: {
 				DEFAULT: "var(--gray-400)",
@@ -48,5 +48,8 @@ export default defineConfig({
 	shortcuts: {
 		container: "max-w-6xl mx-auto px-4 sm:px-6",
 		"container-sm": "max-w-5xl mx-auto px-4 sm:px-6",
+
+		"underline-link":
+			"underline decoration-gray-1000/20 hover:decoration-gray-1000 decoration-offset-3 duration-200",
 	},
 });
