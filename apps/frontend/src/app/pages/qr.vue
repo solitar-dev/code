@@ -26,7 +26,10 @@ function generateQr() {
 
 async function pasteUrl() {
 	inputUrl.value = await navigator.clipboard.readText();
-	generateQr();
+
+	if (isValidUrl.value) {
+		generateQr();
+	}
 }
 
 function clearUrl() {
