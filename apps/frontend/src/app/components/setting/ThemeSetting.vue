@@ -1,14 +1,27 @@
 <script setup lang="ts">
-const themes = ["auto", "light", "dark"];
+type Theme = {
+	id: string;
+	name: string;
+};
+
+const themes: Theme[] = [
+	{
+		id: "system",
+		name: "auto",
+	},
+	{
+		id: "light",
+		name: "light",
+	},
+	{
+		id: "dark",
+		name: "dark",
+	},
+];
 
 const colorMode = useColorMode();
 
 function switchTheme(theme: string) {
-	if (theme === "auto") {
-		colorMode.preference = "system";
-		return;
-	}
-
 	colorMode.preference = theme;
 }
 </script>
@@ -21,14 +34,14 @@ function switchTheme(theme: string) {
 				<button
 					:class="[
 						'w-full p-1 rounded-lg hover:cursor-pointer',
-						colorMode.value === theme
+						colorMode.preference === theme.id
 							? 'bg-gray-1000 text-gray-100 hover:(bg-gray-1000/90)'
 							: 'hover:(bg-gray-200)',
 					]"
 					v-for="theme in themes"
-					:key="theme"
-					@click="switchTheme(theme)">
-					{{ theme }}
+					:key="theme.id"
+					@click="switchTheme(theme.id)">
+					{{ theme.name }}
 				</button>
 			</div>
 		</template>
