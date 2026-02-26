@@ -43,7 +43,7 @@ function onToggle() {
 	<header class="w-full border-b border-b-border">
 		<nav class="container flex justify-between items-center p-3 gap-3">
 			<div class="">
-				<NuxtLink to="/" class="font-brand text-2xl">Solitär</NuxtLink>
+				<NuxtLink to="/" class="font-brand text-2xl">Solitar</NuxtLink>
 			</div>
 			<ul class="flex items-center gap-5">
 				<li v-for="item in items" class="hidden sm:block">
