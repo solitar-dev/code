@@ -67,7 +67,7 @@ const footerItems: FooterColumn[] = [
 </script>
 
 <template>
-	<footer class="p-6">
+	<footer class="p-6 border-t border-t-border">
 		<div
 			class="flex flex-col sm:flex-row items-center justify-center sm:items-start gap-8 sm:gap-16">
 			<div class="gap-3 flex flex-col items-center sm:items-start text-center sm:text-left">
