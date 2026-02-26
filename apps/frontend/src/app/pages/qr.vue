@@ -72,9 +72,9 @@ function downloadQr() {
 			</button>
 		</div>
 	</dialog>
-	<div class="container-sm h-screen flex justify-center items-center flex-col gap-2">
+	<div class="container-sm max-w-2xl h-screen flex justify-center items-center flex-col gap-2">
 		<div
-			class="relative flex items-center border-2 border-border rounded-lg w-full max-w-2xl group focus-within:(border-border-active)">
+			class="relative flex items-center border-2 border-border rounded-lg w-full group focus-within:(border-border-active)">
 			<div class="absolute left-0 flex items-center pointer-events-none p-2">
 				<i class="i-tabler-link text-fg-muted group-focus-within:text-fg"></i>
 			</div>
@@ -92,8 +92,7 @@ function downloadQr() {
 				<i class="i-tabler-x text-fg-muted group-focus-within:text-fg"></i>
 			</button>
 		</div>
-		<div
-			class="flex flex-col sm:flex-row justify-between items-center w-full max-w-2xl font-mono">
+		<div class="flex flex-col sm:flex-row justify-between items-center w-full font-mono">
 			<p class="text-sm self-start text-fg-muted hidden sm:block">
 				Only HTTP/HTTPS URL get supported
 			</p>
