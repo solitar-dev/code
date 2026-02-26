@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-	modules: ["@unocss/nuxt", "@nuxt/fonts", "@nuxtjs/color-mode", "@vueuse/nuxt"],
+	modules: ["@unocss/nuxt", "@nuxt/fonts", "@nuxtjs/color-mode", "@vueuse/nuxt", "@regle/nuxt"],
 	css: ["~/assets/css/main.css"],
 	srcDir: "src/app",
 	dir: {

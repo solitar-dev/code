@@ -51,5 +51,8 @@ export default defineConfig({
 
 		"underline-link":
 			"underline decoration-gray-1000/20 hover:decoration-gray-1000 decoration-offset-3 duration-200",
+
+		"btn-primary":
+			"bg-gray-1000 text-gray-100 hover:(cursor-pointer bg-gray-1000/90) rounded-lg",
 	},
 });
