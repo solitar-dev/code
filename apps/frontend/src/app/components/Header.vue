@@ -40,7 +40,7 @@ function onToggle() {
 </script>
 
 <template>
-	<header class="w-full border-b border-b-border">
+	<header class="w-full border-b border-b-border fixed top-0 z-50 bg-bg/80 backdrop-blur-lg">
 		<nav class="container flex justify-between items-center p-3 gap-3">
 			<div class="">
 				<NuxtLink to="/" class="font-brand text-2xl">Solitar</NuxtLink>
