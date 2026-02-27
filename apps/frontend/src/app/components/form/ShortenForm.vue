@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { maxLength, minLength, minValue, number, regex, required, string } from "@regle/rules";
+import { maxLength, minLength, minValue, number, regex, required, string, url } from "@regle/rules";
 import { joinURL } from "ufo";
 
 type FormData = {
@@ -23,12 +23,7 @@ const state = ref<FormData>({
 const { r$ } = useRegle(state, {
 	longUrl: {
 		required: withMessage(required, "URL is required"),
-		regex: withMessage(
-			regex(
-				/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
-			),
-			"Invalid URL",
-		),
+		url: withMessage(url, "Invalid URL"),
 	},
 	alias: {
 		string: withMessage(string, "Alias must be a string"),

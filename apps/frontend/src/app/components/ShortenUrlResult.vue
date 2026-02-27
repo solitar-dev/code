@@ -4,9 +4,16 @@ import { useQRCode } from "@vueuse/integrations/useQRCode";
 const modal = useTemplateRef("modal");
 const url = ref("");
 const qrCode = useQRCode(url);
+const { copy } = useClipboard();
+const { $toast } = useNuxtApp();
 
 function close() {
 	modal.value?.close();
+}
+
+function copyUrl() {
+	copy(url.value);
+	$toast.success("Copied");
 }
 
 function downloadQr() {
@@ -29,7 +36,10 @@ defineExpose({
 		ref="modal"
 		class="w-11/12 max-w-xl m-auto backdrop:bg-bg/50 shadow-xl bg-bg border-border border rounded-lg">
 		<div class="bg-bg p-5 rounded-t-lg">
-			<NuxtLink :to="url" class="text-fg text-lg font-mono font-bold underline-link"
+			<NuxtLink
+				:to="url"
+				class="text-fg text-lg font-mono font-bold underline-link"
+				target="_blank"
 				>{{ url }}<i class="i-tabler-external-link align-top"></i
 			></NuxtLink>
 			<div class="w-full flex justify-center py-5">
@@ -37,17 +47,24 @@ defineExpose({
 			</div>
 		</div>
 		<div
-			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono">
+			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono flex-col-reverse sm:flex-row gap-5">
 			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200)"
+				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) w-full sm:w-auto"
 				@click="close">
 				Close
 			</button>
-			<button
-				@click="downloadQr"
-				class="flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-				<i class="i-tabler-download"></i>Download
-			</button>
+			<div class="flex items-center gap-2 flex-col-reverse sm:flex-row w-full sm:w-auto">
+				<button
+					@click="downloadQr"
+					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
+					<i class="i-tabler-download"></i>Download
+				</button>
+				<button
+					@click="copyUrl"
+					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
+					<i class="i-tabler-copy"></i>Copy URL
+				</button>
+			</div>
 		</div>
 	</dialog>
 </template>
