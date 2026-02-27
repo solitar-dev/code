@@ -43,13 +43,15 @@ defineExpose({
 				>{{ url }}<i class="i-tabler-external-link align-top"></i
 			></NuxtLink>
 			<div class="w-full flex justify-center py-5">
-				<img :src="qrCode" />
+				<div class="p-1 border border-border rounded-lg">
+					<img :src="qrCode" />
+				</div>
 			</div>
 		</div>
 		<div
 			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono flex-col-reverse sm:flex-row gap-5">
 			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) w-full sm:w-auto"
+				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) w-full sm:w-auto bg-bg"
 				@click="close">
 				Close
 			</button>

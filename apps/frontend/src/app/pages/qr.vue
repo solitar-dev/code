@@ -55,13 +55,15 @@ function downloadQr() {
 		<div class="bg-bg p-5 rounded-t-lg">
 			<h1 class="text-fg text-lg font-mono font-bold">Your QR Code</h1>
 			<div class="w-full flex justify-center py-5">
-				<img :src="qrCode.value" />
+				<div class="p-1 border border-border rounded-lg">
+					<img :src="qrCode.value" />
+				</div>
 			</div>
 		</div>
 		<div
 			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono">
 			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200)"
+				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) bg-bg"
 				@click="closeModal">
 				Close
 			</button>

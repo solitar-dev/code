@@ -33,6 +33,8 @@ export default defineConfig({
 				active: "var(--gray-600)",
 			},
 
+			primary: "#8473ff",
+
 			"gray-100": "var(--gray-100)",
 			"gray-200": "var(--gray-200)",
 			"gray-300": "var(--gray-300)",

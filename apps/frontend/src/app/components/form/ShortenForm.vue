@@ -85,7 +85,7 @@ async function onSubmit() {
 <template>
 	<ShortenUrlResult ref="modal" />
 	<form
-		class="flex flex-col gap-3 border border-border p-5 rounded-lg"
+		class="flex flex-col gap-3 border border-border p-5 rounded-lg font-mono"
 		@submit.prevent="onSubmit">
 		<div class="flex flex-col gap-1">
 			<label for="longUrl">Long URL<span class="text-red-900">*</span></label>
@@ -96,7 +96,7 @@ async function onSubmit() {
 				</div>
 				<input
 					type="text"
-					placeholder="paste the link here"
+					placeholder="https://example.com/my/long/url"
 					class="font-mono outline-none w-full py-2 px-8"
 					spellcheck="false"
 					autocomplete="off"
@@ -115,7 +115,7 @@ async function onSubmit() {
 				</div>
 				<input
 					type="text"
-					placeholder="custom alias"
+					placeholder="my-awesome-link"
 					class="font-mono outline-none w-full py-2 px-8"
 					spellcheck="false"
 					autocomplete="off"
@@ -134,7 +134,7 @@ async function onSubmit() {
 				</div>
 				<input
 					type="password"
-					placeholder="password (optional)"
+					placeholder="super secret string"
 					class="font-mono outline-none w-full py-2 px-8"
 					spellcheck="false"
 					autocomplete="off"

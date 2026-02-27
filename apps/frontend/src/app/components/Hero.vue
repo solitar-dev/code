@@ -3,7 +3,7 @@
 		<div class="w-full flex flex-col gap-5">
 			<div class="">
 				<h1 class="text-6xl">
-					The <span class="text-purple">all-in-one</span> tool that you need.
+					The <span class="text-primary">all-in-one</span> tool that you need.
 				</h1>
 			</div>
 			<div class="text-fg-muted flex flex-col gap-5">
