@@ -93,7 +93,7 @@ async function onSubmit() {
 		class="flex flex-col gap-3 border border-border p-5 rounded-lg"
 		@submit.prevent="onSubmit">
 		<div class="flex flex-col gap-1">
-			<label for="longUrl">Long URL<span class="text-red-1000">*</span></label>
+			<label for="longUrl">Long URL<span class="text-red-900">*</span></label>
 			<div
 				class="relative flex items-center border border-border rounded-lg w-full max-w-2xl group focus-within:(border-border-active) bg-bg-muted">
 				<div class="absolute left-0 flex items-center pointer-events-none p-2">
@@ -154,7 +154,7 @@ async function onSubmit() {
 			<input type="checkbox" id="no-expire" v-model="noExpire" />
 		</div>
 		<div class="flex flex-col gap-1" v-show="!noExpire">
-			<p>Time<span class="text-red-1000">*</span></p>
+			<p>Time<span class="text-red-900">*</span></p>
 			<div class="flex gap-1">
 				<div
 					class="flex items-center border border-border rounded-lg w-full max-w-2xl group focus-within:(border-border-active) bg-bg-muted">
