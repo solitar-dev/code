@@ -5,40 +5,9 @@ type FormData = {
 	longUrl: string;
 	password?: string;
 	alias?: string;
-	expirationTime: number;
-	expirationTimeUnit: ExpireUnit;
+	expireTime: number;
+	expireTimeUnit: ExpireUnit;
 };
-
-const expirationTimeUnits = [
-	{
-		name: "seconds",
-		value: "second",
-	},
-	{
-		name: "minutes",
-		value: "minute",
-	},
-	{
-		name: "hours",
-		value: "hour",
-	},
-	{
-		name: "days",
-		value: "day",
-	},
-	{
-		name: "weeks",
-		value: "week",
-	},
-	{
-		name: "months",
-		value: "month",
-	},
-	{
-		name: "years",
-		value: "year",
-	},
-];
 
 const noExpire = ref<boolean>(true);
 
@@ -46,8 +15,8 @@ const state = ref<FormData>({
 	longUrl: "",
 	alias: "",
 	password: "",
-	expirationTime: 30,
-	expirationTimeUnit: "second",
+	expireTime: 30,
+	expireTimeUnit: "second",
 });
 
 const { r$ } = useRegle(state, {
@@ -70,12 +39,12 @@ const { r$ } = useRegle(state, {
 		minLength: withMessage(minLength(3), "Password must be at least 3 characters"),
 		maxLength: withMessage(maxLength(255), "Password must not exceed 255 characters"),
 	},
-	expirationTime: {
+	expireTime: {
 		required,
 		number: withMessage(number, "Expiration time must be a number"),
 		minValue: withMessage(minValue(0), "Expiration time must be greater than 0"),
 	},
-	expirationTimeUnit: {
+	expireTimeUnit: {
 		required,
 	},
 });
@@ -87,14 +56,14 @@ async function onSubmit() {
 		return;
 	}
 
-	const { longUrl, alias, password, expirationTime, expirationTimeUnit } = result.data;
+	const { longUrl, alias, password, expireTime, expireTimeUnit } = result.data;
 
 	const body = {
 		url: longUrl,
 		...(alias && { alias }),
 		...(password && { password }),
 		...(!noExpire.value && {
-			expireTime: generateExpireTime(expirationTime, expirationTimeUnit),
+			expireTime: generateExpireTime(expireTime, expireTimeUnit),
 		}),
 	};
 
@@ -179,7 +148,7 @@ async function onSubmit() {
 						autocomplete="off"
 						id="expirationTime"
 						name="expirationTime"
-						v-model="r$.$value.expirationTime" />
+						v-model="r$.$value.expireTime" />
 				</div>
 				<div
 					class="flex items-center border border-border rounded-lg w-full max-w-2xl group focus-within:(border-border-active) bg-bg-muted">
@@ -187,11 +156,9 @@ async function onSubmit() {
 						name="expirationTimeUnit"
 						id="expirationTimeUnit"
 						class="w-full p-2 font-mono"
-						v-model="r$.$value.expirationTimeUnit">
-						<option
-							:value="expirationTimeUnit.value"
-							v-for="expirationTimeUnit in expirationTimeUnits">
-							{{ expirationTimeUnit.name }}
+						v-model="r$.$value.expireTimeUnit">
+						<option :value="expireTimeUnit" v-for="expireTimeUnit in expireTimeUnits">
+							{{ expireTimeUnit }}s
 						</option>
 					</select>
 				</div>

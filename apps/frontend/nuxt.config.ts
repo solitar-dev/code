@@ -11,8 +11,29 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
+	// Runtime
+	runtimeConfig: {
+		public: {
+			apiBaseUrl: "",
+			site: {
+				name: "",
+				url: "",
+				env: "",
+			},
+		},
+	},
+	// Build
+	nitro: {
+		prerender: {
+			autoSubfolderIndex: false,
+		},
+		preset: "cloudflare-module",
+		cloudflare: {
+			nodeCompat: true,
+		},
+	},
 
+	// Development
 	devtools: { enabled: true },
-
 	compatibilityDate: "2025-07-15",
 });
