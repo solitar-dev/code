@@ -1,5 +1,13 @@
 export default defineNuxtConfig({
-	modules: ["@unocss/nuxt", "@nuxt/fonts", "@nuxtjs/color-mode", "@vueuse/nuxt", "@regle/nuxt"],
+	modules: [
+		"@unocss/nuxt",
+		"@nuxt/fonts",
+		"@nuxtjs/color-mode",
+		"@vueuse/nuxt",
+		"@regle/nuxt",
+		"nuxt-og-image",
+		"vue-sonner/nuxt",
+	],
 	css: ["~/assets/css/main.css"],
 	srcDir: "src/app",
 	dir: {

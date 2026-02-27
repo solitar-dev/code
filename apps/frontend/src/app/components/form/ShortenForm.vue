@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { maxLength, minLength, minValue, number, regex, required, string } from "@regle/rules";
+import { joinURL } from "ufo";
 
 type FormData = {
 	longUrl: string;
@@ -49,6 +50,11 @@ const { r$ } = useRegle(state, {
 	},
 });
 
+const { $api, $toast } = useNuxtApp();
+const urlRepository = repository($api);
+const siteConfig = useSiteConfig();
+const modal = useTemplateRef("modal");
+
 async function onSubmit() {
 	const result = await r$.$validate();
 
@@ -58,7 +64,7 @@ async function onSubmit() {
 
 	const { longUrl, alias, password, expireTime, expireTimeUnit } = result.data;
 
-	const body = {
+	const body: UrlShortenerBody = {
 		url: longUrl,
 		...(alias && { alias }),
 		...(password && { password }),
@@ -67,11 +73,22 @@ async function onSubmit() {
 		}),
 	};
 
-	console.log(body);
+	try {
+		const data = await urlRepository.shortenUrl(body);
+
+		modal.value?.open({ url: joinURL(siteConfig.url, data.shortCode) });
+	} catch (error: any) {
+		if (!error.data) {
+			$toast.error("The server has been shutdown. Please try again later");
+		} else {
+			$toast.error(error.data.detail);
+		}
+	}
 }
 </script>
 
 <template>
+	<ShortenUrlResult ref="modal" />
 	<form
 		class="flex flex-col gap-3 border border-border p-5 rounded-lg"
 		@submit.prevent="onSubmit">

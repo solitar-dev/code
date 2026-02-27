@@ -17,19 +17,23 @@
 		"@regle/core": "^1.19.13",
 		"@regle/nuxt": "^1.19.13",
 		"@regle/rules": "^1.19.13",
+		"@takumi-rs/core": "^0.69.2",
 		"@vueuse/integrations": "^14.2.1",
 		"arktype": "^2.1.29",
 		"dayjs": "^1.11.19",
 		"nuxt": "^4.3.1",
 		"qrcode": "^1.5.4",
+		"ufo": "^1.6.3",
 		"vue": "^3.5.28",
-		"vue-router": "^4.6.4"
+		"vue-router": "^4.6.4",
+		"vue-sonner": "^2.0.9"
 	},
 	"devDependencies": {
 		"@iconify-json/tabler": "^1.2.27",
 		"@unocss/nuxt": "^66.6.0",
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/nuxt": "^14.2.1",
+		"nuxt-og-image": "6.0.0-beta.41",
 		"oxlint": "^1.50.0",
 		"oxlint-tsgolint": "^0.14.2",
 		"unocss": "^66.6.0"

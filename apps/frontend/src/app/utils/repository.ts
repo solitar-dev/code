@@ -1,0 +1,43 @@
+import type { $Fetch, NitroFetchRequest } from "nitropack";
+
+type StatisticData = {
+	totalLinks: number;
+	totalClicks: number;
+};
+
+type UrlShortenerResponse = {
+	originalUrl: string;
+	shortCode: string;
+};
+
+export type UrlShortenerBody = {
+	url: string;
+	alias?: string;
+	password?: string;
+	expireTime?: string;
+};
+
+type GetLongUrlBody = {
+	shortCode: string;
+	password?: string;
+};
+
+export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
+	async getStatisticData(): Promise<StatisticData> {
+		return fetch<StatisticData>("/statistics");
+	},
+	async shortenUrl(body: UrlShortenerBody): Promise<UrlShortenerResponse> {
+		return fetch<UrlShortenerResponse>("/create", {
+			method: "post",
+			body,
+		});
+	},
+	async getLongUrl(body: GetLongUrlBody): Promise<string> {
+		const data = await fetch<{ originalUrl: string }>("/forward", {
+			method: "post",
+			body,
+		});
+
+		return data.originalUrl;
+	},
+});
