@@ -43,6 +43,17 @@ export default defineConfig({
 			"gray-800": "var(--gray-800)",
 			"gray-900": "var(--gray-900)",
 			"gray-1000": "var(--gray-1000)",
+
+			"red-100": "var(--red-100)",
+			"red-200": "var(--red-200)",
+			"red-300": "var(--red-300)",
+			"red-400": "var(--red-400)",
+			"red-500": "var(--red-500)",
+			"red-600": "var(--red-600)",
+			"red-700": "var(--red-700)",
+			"red-800": "var(--red-800)",
+			"red-900": "var(--red-900)",
+			"red-1000": "var(--red-1000)",
 		},
 	},
 	shortcuts: {
