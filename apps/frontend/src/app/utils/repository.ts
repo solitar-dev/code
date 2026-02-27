@@ -1,5 +1,4 @@
 import type { $Fetch, NitroFetchRequest } from "nitropack";
-import { joinURL } from "ufo";
 
 type StatisticData = {
 	totalLinks: number;

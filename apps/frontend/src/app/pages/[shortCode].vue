@@ -6,7 +6,6 @@ const { $api } = useNuxtApp();
 const urlRepository = repository($api);
 
 const shortCode = route.params.shortCode!.toString();
-
 const { data, error } = await useAsyncData(() => urlRepository.getLongUrl({ shortCode }));
 
 if (error.value) {
@@ -35,13 +34,11 @@ const isSecure = protocol === "https:";
 if (isSecure) {
 	await navigateTo(originalUrl, {
 		external: true,
-		redirectCode: 302,
+		redirectCode: 301,
 	});
 }
 </script>
 
 <template>
-	<div class="w-full h-screen grid place-items-center" v-if="!isSecure">
-		<SecureWarning :url="originalUrl" />
-	</div>
+	<NotSecureWarning :url="originalUrl" v-if="!isSecure" />
 </template>

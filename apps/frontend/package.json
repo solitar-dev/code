@@ -12,27 +12,32 @@
 		"lint:fix": "oxlint --fix"
 	},
 	"dependencies": {
-		"@nuxt/image": "^2.0.0",
-		"@nuxt/ui": "^4.4.0",
-		"@nuxtjs/seo": "^3.4.0",
+		"@nuxt/fonts": "^0.14.0",
+		"@nuxtjs/color-mode": "^4.0.0",
+		"@regle/core": "^1.19.13",
+		"@regle/nuxt": "^1.19.13",
+		"@regle/rules": "^1.19.13",
+		"@takumi-rs/core": "^0.69.2",
 		"@vueuse/integrations": "^14.2.1",
 		"arktype": "^2.1.29",
 		"dayjs": "^1.11.19",
 		"nuxt": "^4.3.1",
 		"qrcode": "^1.5.4",
-		"tailwindcss": "^4.2.0",
 		"ufo": "^1.6.3",
 		"vue": "^3.5.28",
-		"vue-router": "^4.6.4"
+		"vue-router": "^4.6.4",
+		"vue-sonner": "^2.0.9"
 	},
 	"devDependencies": {
-		"@iconify-json/carbon": "^1.2.18",
-		"@iconify-json/lucide": "^1.2.92",
-		"@iconify-json/tabler": "^1.2.26",
+		"@iconify-json/tabler": "^1.2.27",
+		"@takumi-rs/wasm": "^0.69.2",
+		"@unocss/nuxt": "^66.6.0",
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/nuxt": "^14.2.1",
-		"oxlint": "^1.48.0",
+		"nuxt-og-image": "6.0.0-beta.41",
+		"oxlint": "^1.50.0",
 		"oxlint-tsgolint": "^0.14.2",
-		"wrangler": "^4.67.0"
+		"unocss": "^66.6.0",
+		"wrangler": "^4.69.0"
 	}
 }
