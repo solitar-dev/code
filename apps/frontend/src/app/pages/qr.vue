@@ -2,6 +2,8 @@
 import { useQRCode } from "@vueuse/integrations/useQRCode";
 import { type } from "arktype";
 
+defineOgImage("Basic.takumi", { subtitle: "./qr", description: "Generate QR code for url" });
+
 const permission = usePermission("clipboard-read");
 const inputUrl = ref();
 const isValidUrl = computed(() => {

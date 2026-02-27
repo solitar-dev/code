@@ -19,6 +19,25 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
+	fonts: {
+		families: [
+			{
+				name: "Geist",
+				weights: ["400", "500", "600", "700", "800"],
+				global: true,
+			},
+			{
+				name: "Geist Mono",
+				weights: ["400", "500", "600", "700", "800"],
+				global: true,
+			},
+			{
+				name: "Orbitron",
+				weights: ["400"],
+				global: true,
+			},
+		],
+	},
 	// Runtime
 	runtimeConfig: {
 		public: {

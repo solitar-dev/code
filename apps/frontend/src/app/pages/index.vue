@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineOgImage("Basic.takumi");
+</script>
 
 <template>
 	<div class="container-sm flex flex-col gap-12">

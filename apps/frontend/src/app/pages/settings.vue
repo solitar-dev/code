@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineOgImage("Basic.takumi", {
+	subtitle: "./settings",
+	description: "customize your solitar experience",
+});
+</script>
 
 <template>
 	<div class="container-sm max-w-2xl h-screen font-mono">
