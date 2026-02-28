@@ -8,10 +8,10 @@ defineProps<Props>();
 </script>
 
 <template>
-	<div class="relative">
-		<img src="/og_template.png" alt="og" class="absolute" width="1200px" height="630px" />
+	<div class="relative h-full w-full overflow-hidden">
+		<img src="/og_template.png" alt="og" class="absolute z-1" width="1200px" height="630px" />
 
-		<div class="relative flex flex-col justify-between my-12 mx-20">
+		<div class="relative flex flex-col justify-between my-12 mx-20 z-10">
 			<h1 class="text-7xl text-[#EDEDED]" :style="{ fontFamily: 'Orbitron' }">Solitar</h1>
 
 			<div class="flex flex-col" :style="{ fontFamily: 'Geist Mono' }">
