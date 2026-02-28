@@ -14,11 +14,11 @@ defineProps<Props>();
 		<div class="relative flex flex-col justify-between my-12 mx-20 z-10">
 			<h1
 				class="text-7xl text-[#EDEDED]"
-				style="font-family: &quot;Orbitron&quot;, sans-serif">
+				style="font-family: 'Orbitron', sans-serif">
 				Solitar
 			</h1>
 
-			<div class="flex flex-col" style="font-family: &quot;Geist Mono&quot;, monospace">
+			<div class="flex flex-col" style="font-family: 'Geist Mono', monospace">
 				<h2 class="text-5xl text-[#EDEDED]" v-if="subtitle">{{ subtitle }}</h2>
 				<h3 v-if="description" class="text-[#A0A0A0] text-3xl">
 					{{ description }}
