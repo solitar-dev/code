@@ -38,6 +38,24 @@ export default defineNuxtConfig({
 			},
 		],
 	},
+	app: {
+		head: {
+			link: [
+				{
+					rel: "icon",
+					type: "image/svg+xml",
+					href: "/icon-light.svg",
+					media: "(prefers-color-scheme: light)",
+				},
+				{
+					rel: "icon",
+					type: "image/svg+xml",
+					href: "/icon-dark.svg",
+					media: "(prefers-color-scheme: dark)",
+				},
+			],
+		},
+	},
 	// Runtime
 	runtimeConfig: {
 		public: {
