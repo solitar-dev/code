@@ -1,5 +1,14 @@
 <script setup lang="ts">
 defineOgImage("Basic.takumi");
+
+useSeoMeta({
+	title: "url shortener - solitar",
+	ogTitle: "url shortener - solitar",
+	twitterTitle: "url shortener - solitar",
+	description: "Create short URLS for your website and social media pages in seconds",
+	ogDescription: "Create short URLS for your website and social media pages in seconds",
+	twitterDescription: "Create short URLS for your website and social media pages in seconds",
+});
 </script>
 
 <template>
