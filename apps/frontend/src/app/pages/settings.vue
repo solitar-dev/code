@@ -3,6 +3,14 @@ defineOgImage("Basic.takumi", {
 	subtitle: "./settings",
 	description: "customize your solitar experience",
 });
+useSeoMeta({
+	title: "settings - Solitar",
+	ogTitle: "settings - Solitar",
+	twitterTitle: "settings - Solitar",
+	description: "Create QR code for your URLS in seconds, save and share it immediately",
+	ogDescription: "Create QR code for your URLS in seconds, save and share it immediately",
+	twitterDescription: "Create QR code for your URLS in seconds, save and share it immediately",
+});
 </script>
 
 <template>

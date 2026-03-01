@@ -20,6 +20,9 @@ export default defineNuxtConfig({
 		},
 	],
 	fonts: {
+		defaults: {
+			formats: ["ttf"],
+		},
 		families: [
 			{
 				name: "Geist",
