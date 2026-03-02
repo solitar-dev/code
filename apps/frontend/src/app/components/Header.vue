@@ -7,17 +7,17 @@ type NavigationItem = {
 
 const items: NavigationItem[] = [
 	{
-		name: "url shortener",
+		name: $t("nav.url_shortener"),
 		path: "/",
 		kbd: "s",
 	},
 	{
-		name: "qr generator",
+		name: $t("nav.qr_generator"),
 		path: "/qr",
 		kbd: "q",
 	},
 	{
-		name: "settings",
+		name: $t("nav.settings"),
 		path: "/settings",
 		kbd: ",",
 	},

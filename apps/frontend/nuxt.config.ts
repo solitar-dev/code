@@ -7,6 +7,7 @@ export default defineNuxtConfig({
 		"@regle/nuxt",
 		"nuxt-og-image",
 		"vue-sonner/nuxt",
+		"@nuxtjs/i18n",
 	],
 	css: ["~/assets/css/main.css"],
 	srcDir: "src/app",
@@ -58,6 +59,12 @@ export default defineNuxtConfig({
 				},
 			],
 		},
+	},
+	// Internationalization
+	i18n: {
+		restructureDir: "./src/i18n",
+		defaultLocale: "en",
+		locales: [{ code: "en", name: "English", file: "en.json" }],
 	},
 	// Runtime
 	runtimeConfig: {

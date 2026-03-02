@@ -1,0 +1,24 @@
+{
+	"nav": {
+		"url_shortener": "url shortener",
+		"qr_generator": "qr generator",
+		"settings": "settings"
+	},
+
+	"footer": {
+		"column": {
+			"about": "about",
+			"resource": "resource",
+			"legal": "legal"
+		},
+		"item": {
+			"changelog": "changelog",
+			"status": "status",
+			"translate": "translate",
+			"api": "api",
+			"terms_of_use": "terms of use",
+			"privacy_policy": "privacy_policy",
+			"report": "report"
+		}
+	}
+}

@@ -21,44 +21,44 @@ const socialLinks: SocialLink[] = [
 
 const footerItems: FooterColumn[] = [
 	{
-		title: "about",
+		title: $t("footer.column.about"),
 		items: [
 			{
-				name: "changelog",
+				name: $t("footer.item.changelog"),
 				link: "/changelog",
 			},
 			{
-				name: "status",
+				name: $t("footer.item.status"),
 				link: "https://status.solitar.io.vn",
 			},
 		],
 	},
 	{
-		title: "resources",
+		title: $t("footer.column.resource"),
 		items: [
 			{
-				name: "translate",
+				name: $t("footer.item.translate"),
 				link: "/translate",
 			},
 			{
-				name: "api",
+				name: $t("footer.item.api"),
 				link: "/api",
 			},
 		],
 	},
 	{
-		title: "legal",
+		title: $t("footer.column.legal"),
 		items: [
 			{
-				name: "terms of use",
+				name: $t("footer.item.terms_of_use"),
 				link: "/terms",
 			},
 			{
-				name: "privacy policy",
+				name: $t("footer.item.privacy_policy"),
 				link: "/privacy",
 			},
 			{
-				name: "report",
+				name: $t("footer.item.report"),
 				link: "/report",
 			},
 		],

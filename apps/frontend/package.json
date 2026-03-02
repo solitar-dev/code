@@ -14,6 +14,7 @@
 	"dependencies": {
 		"@nuxt/fonts": "^0.14.0",
 		"@nuxtjs/color-mode": "^4.0.0",
+		"@nuxtjs/i18n": "10.2.3",
 		"@regle/core": "^1.19.13",
 		"@regle/nuxt": "^1.19.13",
 		"@regle/rules": "^1.19.13",
