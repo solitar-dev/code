@@ -20,5 +20,36 @@
 			"privacy_policy": "privacy_policy",
 			"report": "report"
 		}
+	},
+
+	"feature": {
+		"title": "What comes with Solitar?",
+		"subtitle": "Everything you need when work with URLs",
+		"item": {
+			"speed": {
+				"title": "Blazingly Fast",
+				"description": "Instant redirects with zero latency. No middleman pages or ad-interstitials."
+			},
+			"analytics": {
+				"title": "Privacy-Focused Analytics",
+				"description": "Track click counts and referrers without harvesting personal user data."
+			},
+			"api": {
+				"title": "Developer First",
+				"description": "Powerful REST API to automate link creation within your own applications."
+			},
+			"expiration": {
+				"title": "Flexible Expiry",
+				"description": "Set links to live forever or schedule them to self-destruct after a specific time."
+			},
+			"security": {
+				"title": "Security Verification",
+				"description": "Warns users when they access websites that do not comply with security standards."
+			},
+			"open_source": {
+				"title": "Open Source",
+				"description": "Fully transparent redirection logic. Audit the code, host it yourself."
+			}
+		}
 	}
 }
