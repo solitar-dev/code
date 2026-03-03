@@ -5,11 +5,12 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.sqids.Sqids
+import org.tobynguyen.solitar.exception.IncorrectPasswordException
+import org.tobynguyen.solitar.exception.PasswordProtectedException
+import org.tobynguyen.solitar.exception.ShortCodeConflictException
 import org.tobynguyen.solitar.exception.UrlDisabledException
 import org.tobynguyen.solitar.exception.UrlExpiredException
 import org.tobynguyen.solitar.exception.UrlNotFoundException
-import org.tobynguyen.solitar.exception.UrlProtectedException
-import org.tobynguyen.solitar.exception.UrlShortCodeConflictedException
 import org.tobynguyen.solitar.mapper.toResponseDto
 import org.tobynguyen.solitar.model.dto.UrlCreateDto
 import org.tobynguyen.solitar.model.dto.UrlForwardDto
@@ -30,26 +31,24 @@ class UrlService(
 
         val urlEntity =
             urlRepository.findByShortCode(shortCode)
-                ?: throw UrlNotFoundException("Short URL '$shortCode' does not exist.")
+                ?: throw UrlNotFoundException("Short URL with code '$shortCode' not found.")
 
-        if (urlEntity.isDisabled)
-            throw UrlDisabledException("This URL has been disabled due to violation of terms.")
+        if (urlEntity.isDisabled) throw UrlDisabledException()
 
         if (urlEntity.expiresAt != null && urlEntity.expiresAt!!.isBefore(Instant.now()))
-            throw UrlExpiredException("This URL is no longer available")
+            throw UrlExpiredException()
 
         urlRepository.incrementClickCount(urlEntity.id)
 
         return if (urlEntity.password == null) {
             UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
         } else {
-            if (password == null)
-                throw UrlProtectedException("Please provide a valid password to unlock this URL.")
+            if (password == null) throw PasswordProtectedException()
 
             if (argon2Encoder.matches(password, urlEntity.password)) {
                 UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
             } else {
-                throw UrlDisabledException("Incorrect password")
+                throw IncorrectPasswordException()
             }
         }
     }
@@ -76,7 +75,7 @@ class UrlService(
                 ) {
                     existing
                 } else {
-                    throw UrlShortCodeConflictedException("This alias already exists.")
+                    throw ShortCodeConflictException()
                 }
             } else {
                 createAndSaveUrl(url, alias, expireTime, hashedPassword)
