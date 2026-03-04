@@ -5,11 +5,12 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.sqids.Sqids
+import org.tobynguyen.solitar.exception.IncorrectPasswordException
+import org.tobynguyen.solitar.exception.PasswordProtectedException
+import org.tobynguyen.solitar.exception.ShortCodeConflictException
 import org.tobynguyen.solitar.exception.UrlDisabledException
 import org.tobynguyen.solitar.exception.UrlExpiredException
 import org.tobynguyen.solitar.exception.UrlNotFoundException
-import org.tobynguyen.solitar.exception.UrlProtectedException
-import org.tobynguyen.solitar.exception.UrlShortCodeConflictedException
 import org.tobynguyen.solitar.mapper.toResponseDto
 import org.tobynguyen.solitar.model.dto.UrlCreateDto
 import org.tobynguyen.solitar.model.dto.UrlForwardDto
@@ -30,26 +31,24 @@ class UrlService(
 
         val urlEntity =
             urlRepository.findByShortCode(shortCode)
-                ?: throw UrlNotFoundException("Short URL '$shortCode' does not exist.")
+                ?: throw UrlNotFoundException("Short URL with code '$shortCode' not found.")
 
-        if (urlEntity.isDisabled)
-            throw UrlDisabledException("This URL has been disabled due to violation of terms.")
+        if (urlEntity.isDisabled) throw UrlDisabledException()
 
         if (urlEntity.expiresAt != null && urlEntity.expiresAt!!.isBefore(Instant.now()))
-            throw UrlExpiredException("This URL is no longer available")
+            throw UrlExpiredException()
 
         urlRepository.incrementClickCount(urlEntity.id)
 
         return if (urlEntity.password == null) {
             UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
         } else {
-            if (password == null)
-                throw UrlProtectedException("Please provide a valid password to unlock this URL.")
+            if (password == null) throw PasswordProtectedException()
 
             if (argon2Encoder.matches(password, urlEntity.password)) {
                 UrlForwardResponseDto(urlEntity.toResponseDto().originalUrl)
             } else {
-                throw UrlDisabledException("Incorrect password")
+                throw IncorrectPasswordException()
             }
         }
     }
@@ -58,65 +57,61 @@ class UrlService(
     fun createUrl(data: UrlCreateDto): UrlEntity {
         val (url, expireTime, alias, password) = data
 
-        val hashedPassword =
-            if (password != null) {
-                argon2Encoder.encode(password)
-            } else {
-                null
-            }
+        val hashedPassword = password?.let { argon2Encoder.encode(it) }
 
         if (alias != null) {
             val existing = urlRepository.findByShortCode(alias)
 
             return if (existing != null) {
+                val isPasswordMatch =
+                    if (password == null && existing.password == null) {
+                        true
+                    } else if (password != null && existing.password != null) {
+                        argon2Encoder.matches(password, existing.password)
+                    } else {
+                        false
+                    }
+
                 if (
                     existing.originalUrl == url &&
                         existing.expiresAt == expireTime &&
-                        existing.password == null
+                        isPasswordMatch
                 ) {
                     existing
                 } else {
-                    throw UrlShortCodeConflictedException("This alias already exists.")
+                    throw ShortCodeConflictException()
                 }
             } else {
                 createAndSaveUrl(url, alias, expireTime, hashedPassword)
             }
         } else {
-            if (expireTime == null) {
-                val existing =
+            val existingList =
+                if (expireTime == null) {
                     urlRepository.findByOriginalUrlAndExpiresAtIsNullAndHasAliasFalse(url)
-
-                if (existing.isEmpty()) {
-                    return createAndSaveUrl(url, alias, expireTime, hashedPassword)
-                }
-
-                existing.forEach {
-                    if (
-                        (password == null && it.password == null) ||
-                            argon2Encoder.matches(password, it.password)
-                    )
-                        return it
-                }
-
-                return createAndSaveUrl(url, null, null, hashedPassword)
-            } else {
-                val existing =
+                } else {
                     urlRepository.findByOriginalUrlAndExpiresAtAndHasAliasFalse(url, expireTime)
-
-                if (existing.isEmpty()) {
-                    return createAndSaveUrl(url, alias, expireTime, hashedPassword)
                 }
 
-                existing.forEach {
-                    if (
-                        (password == null && it.password == null) ||
-                            argon2Encoder.matches(password, it.password)
-                    )
-                        return it
-                }
-
+            if (existingList.isEmpty()) {
                 return createAndSaveUrl(url, null, expireTime, hashedPassword)
             }
+
+            existingList.forEach {
+                val isPasswordMatch =
+                    if (password == null && it.password == null) {
+                        true
+                    } else if (password != null && it.password != null) {
+                        argon2Encoder.matches(password, it.password)
+                    } else {
+                        false
+                    }
+
+                if (isPasswordMatch) {
+                    return it
+                }
+            }
+
+            return createAndSaveUrl(url, null, expireTime, hashedPassword)
         }
     }
 

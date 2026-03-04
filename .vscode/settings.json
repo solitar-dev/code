@@ -12,11 +12,6 @@
 	"workbench.editorAssociations": {
 		"*.svg": "default"
 	},
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
 	"typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
-
-	"tailwindCSS.classAttributes": ["class", "ui"],
-	"tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]]
+	"cSpell.words": ["Solitär"]
 }

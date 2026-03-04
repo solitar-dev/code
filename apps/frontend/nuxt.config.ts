@@ -1,5 +1,14 @@
 export default defineNuxtConfig({
-	modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/seo"],
+	modules: [
+		"@unocss/nuxt",
+		"@nuxt/fonts",
+		"@nuxtjs/color-mode",
+		"@vueuse/nuxt",
+		"@regle/nuxt",
+		"nuxt-og-image",
+		"vue-sonner/nuxt",
+		"@nuxtjs/i18n",
+	],
 	css: ["~/assets/css/main.css"],
 	srcDir: "src/app",
 	dir: {
@@ -11,8 +20,34 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
-	// Routes
-	routeRules: {},
+	fonts: {
+		defaults: {
+			formats: ["ttf"],
+		},
+		families: [
+			{
+				name: "Geist",
+				weights: ["400", "500", "600", "700", "800"],
+				global: true,
+			},
+			{
+				name: "Geist Mono",
+				weights: ["400", "500", "600", "700", "800"],
+				global: true,
+			},
+			{
+				name: "Orbitron",
+				weights: ["400"],
+				global: true,
+			},
+		],
+	},
+	// Internationalization
+	i18n: {
+		restructureDir: "./src/i18n",
+		defaultLocale: "en",
+		locales: [{ code: "en", name: "English", file: "en.json" }],
+	},
 	// Runtime
 	runtimeConfig: {
 		public: {
@@ -24,7 +59,7 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	// Deploy
+	// Build
 	nitro: {
 		prerender: {
 			autoSubfolderIndex: false,
@@ -34,15 +69,8 @@ export default defineNuxtConfig({
 			nodeCompat: true,
 		},
 	},
-	// SEO
-	robots: {
-		blockAiBots: true,
-		blockNonSeoBots: true,
-	},
-	ogImage: {
-		enabled: false,
-	},
+
 	// Development
-	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
+	compatibilityDate: "2025-07-15",
 });

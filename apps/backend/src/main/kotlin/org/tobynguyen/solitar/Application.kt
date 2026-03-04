@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import org.tobynguyen.solitar.config.AppCorsConfig
+import org.tobynguyen.solitar.config.properties.AppCorsConfig
 
 @SpringBootApplication
 @EnableConfigurationProperties(AppCorsConfig::class)

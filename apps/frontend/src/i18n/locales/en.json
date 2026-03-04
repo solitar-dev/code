@@ -1,0 +1,141 @@
+{
+	"site": {
+		"url_shortener": {
+			"title": "url shortener - solitar",
+			"og_title": "URL Shortener - Solitar",
+			"description": "Create short URLS for your website and social media pages in seconds"
+		},
+		"qr_generator": {
+			"title": "qr code generator - solitar",
+			"og_title": "QR Code Generator - Solitar",
+			"description": "Create QR code for your URLS in seconds, save and share it immediately"
+		},
+		"settings": {
+			"title": "settings - solitar",
+			"og_title": "Settings - Solitar",
+			"description": "Customize your solitar experience"
+		}
+	},
+
+	"nav": {
+		"url_shortener": "url shortener",
+		"qr_generator": "qr generator",
+		"settings": "settings"
+	},
+
+	"footer": {
+		"column": {
+			"about": "about",
+			"resource": "resource",
+			"legal": "legal"
+		},
+		"item": {
+			"changelog": "changelog",
+			"status": "status",
+			"translate": "translate",
+			"api": "api",
+			"terms_of_use": "terms of use",
+			"privacy_policy": "privacy_policy",
+			"report": "report"
+		}
+	},
+
+	"feature": {
+		"title": "What comes with Solitar?",
+		"subtitle": "Everything you need when work with URLs",
+		"item": {
+			"speed": {
+				"title": "Blazingly Fast",
+				"description": "Instant redirects with zero latency. No middleman pages or ad-interstitials."
+			},
+			"analytics": {
+				"title": "Privacy-Focused Analytics",
+				"description": "Track click counts and referrers without harvesting personal user data."
+			},
+			"api": {
+				"title": "Developer First",
+				"description": "Powerful REST API to automate link creation within your own applications."
+			},
+			"expiration": {
+				"title": "Flexible Expiry",
+				"description": "Set links to live forever or schedule them to self-destruct after a specific time."
+			},
+			"security": {
+				"title": "Security Verification",
+				"description": "Warns users when they access websites that do not comply with security standards."
+			},
+			"open_source": {
+				"title": "Open Source",
+				"description": "Fully transparent redirection logic. Audit the code, host it yourself."
+			}
+		}
+	},
+
+	"form": {
+		"password": {
+			"empty": "Password cannot be empty",
+			"invalid": "Password must be a string",
+			"min": "Password must be at least 3 characters",
+			"max": "Password must not exceed 255 characters"
+		},
+		"url": {
+			"required": "URL is required",
+			"invalid": "Invalid URL"
+		},
+		"alias": {
+			"invalid": "ALias must be a string",
+			"min": "Alias must be at least 7 characters",
+			"max": "Alias must not exceed 255 characters"
+		},
+		"expire_time": {
+			"invalid": "Expiration time must be a number",
+			"min": "Expiration time must be greater than 0"
+		}
+	},
+
+	"settings": {
+		"theme": {
+			"auto": "Auto",
+			"light": "Light",
+			"dark": "Dark"
+		}
+	},
+
+	"counter": "{count} links created that have been accessed {clicks} times",
+
+	"hero": {
+		"title": "The all-in-one tool that you need.",
+		"subtitle_1": "Solitar is an open source, powerful, everyday platform that lets you shorten long links, create instant QR codes.",
+		"subtitle_2": "Solitar delivers instant redirects with zero ad-interstitials, automate your workflow with our REST API and set flexible expiration dates for your links."
+	},
+
+	"not_secure_warning": {
+		"title": "Your connection is not private",
+		"description": "The link you're about to visit does not use HTTPS, which means your connection is not encrypted. Your data could be intercepted by third parties.",
+		"enforce_https": "Enforce HTTPS",
+		"accept_risk": "Accept Risk & Continue"
+	},
+
+	"unlock": {
+		"title": "The URL is locked",
+		"description": "The link you're about to visit has been locked by the creator. Please provide a password to unlock it"
+	},
+
+	"button": {
+		"download": "download",
+		"copy_url": "copy url",
+		"close": "close",
+		"unlock": "unlock",
+		"return": "return"
+	},
+
+	"error": {
+		"url_not_found": "URL not found",
+		"url_expired": "This URL is no longer available",
+		"url_disabled": "This URL has been disabled due to violation of terms",
+		"short_code_conflict": "This alias already exists.",
+		"password_protected": "Please provide a valid password to unlock this URL",
+		"incorrect_password": "The provided password is incorrect.",
+		"default": "Something went wrong"
+	}
+}

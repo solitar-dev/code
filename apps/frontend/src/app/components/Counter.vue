@@ -4,21 +4,21 @@ const statisticRepo = repository($api);
 
 const { pending, data } = await useAsyncData(() => statisticRepo.getStatisticData());
 
-const totalLinks = data.value?.totalLinks ?? 0;
-const totalClicks = data.value?.totalClicks ?? 0;
+const totalLinks = computed(() => data.value?.totalLinks ?? 0);
+const totalClicks = computed(() => data.value?.totalClicks ?? 0);
 </script>
 
 <template>
-	<div class="flex flex-col sm:flex-row justify-center items-center sm:gap-5">
-		<template v-if="pending"
-			><USkeleton class="w-full h-7" /> <USkeleton class="w-full h-7"
-		/></template>
+	<div class="">
+		<div class="w-full bg-gray-200 h-7 rounded-lg" v-if="pending" />
+		<i18n-t keypath="counter" tag="p" class="font-semibold text-lg" v-else>
+			<template #count>
+				<span class="text-2xl text-primary">{{ totalLinks }}</span>
+			</template>
 
-		<template v-else>
-			<p class="sm:text-xl font-semibold text-center sm:text-left">
-				<span class="text-2xl text-primary">{{ totalLinks }}</span> links created that have
-				been accessed <span class="text-2xl text-primary">{{ totalClicks }}</span> times
-			</p>
-		</template>
+			<template #clicks>
+				<span class="text-2xl text-primary">{{ totalClicks }}</span>
+			</template>
+		</i18n-t>
 	</div>
 </template>
