@@ -4,12 +4,12 @@ defineOgImage("Basic.takumi", {
 	description: "customize your solitar experience",
 });
 useSeoMeta({
-	title: "settings - Solitar",
-	ogTitle: "settings - Solitar",
-	twitterTitle: "settings - Solitar",
-	description: "Create QR code for your URLS in seconds, save and share it immediately",
-	ogDescription: "Create QR code for your URLS in seconds, save and share it immediately",
-	twitterDescription: "Create QR code for your URLS in seconds, save and share it immediately",
+	title: $t("site.settings.title"),
+	ogTitle: $t("site.settings.og_title"),
+	twitterTitle: $t("site.settings.og_title"),
+	description: $t("site.settings.description"),
+	ogDescription: $t("site.settings.description"),
+	twitterDescription: $t("site.settings.description"),
 });
 </script>
 
@@ -17,7 +17,7 @@ useSeoMeta({
 	<div class="container-sm max-w-2xl h-screen font-mono">
 		<div class="py-12 mt-12">
 			<h1 class="text-3xl font-bold">settings</h1>
-			<p class="text-fg-muted">customize your solitar experience</p>
+			<p class="text-fg-muted lowercase">{{ $t("site.settings.description") }}</p>
 		</div>
 		<div class="flex flex-col gap-12">
 			<ThemeSetting />

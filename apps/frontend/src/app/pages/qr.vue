@@ -4,12 +4,12 @@ import { type } from "arktype";
 
 defineOgImage("Basic.takumi", { subtitle: "./qr", description: "Generate QR code for url" });
 useSeoMeta({
-	title: "qr code generator - solitar",
-	ogTitle: "qr code generator - solitar",
-	twitterTitle: "qr code generator - solitar",
-	description: "Create QR code for your URLS in seconds, save and share it immediately",
-	ogDescription: "Create QR code for your URLS in seconds, save and share it immediately",
-	twitterDescription: "Create QR code for your URLS in seconds, save and share it immediately",
+	title: $t("site.qr_generator.title"),
+	ogTitle: $t("site.qr_generator.og_title"),
+	twitterTitle: $t("site.qr_generator.og_title"),
+	description: $t("site.qr_generator.description"),
+	ogDescription: $t("site.qr_generator.description"),
+	twitterDescription: $t("site.qr_generator.description"),
 });
 
 const permission = usePermission("clipboard-read");

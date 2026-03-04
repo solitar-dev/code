@@ -1,4 +1,22 @@
 {
+	"site": {
+		"url_shortener": {
+			"title": "url shortener - solitar",
+			"og_title": "URL Shortener - Solitar",
+			"description": "Create short URLS for your website and social media pages in seconds"
+		},
+		"qr_generator": {
+			"title": "qr code generator - solitar",
+			"og_title": "QR Code Generator - Solitar",
+			"description": "Create QR code for your URLS in seconds, save and share it immediately"
+		},
+		"settings": {
+			"title": "settings - solitar",
+			"og_title": "Settings - Solitar",
+			"description": "Customize your solitar experience"
+		}
+	},
+
 	"nav": {
 		"url_shortener": "url shortener",
 		"qr_generator": "qr generator",

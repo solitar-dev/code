@@ -50,6 +50,9 @@ async function unlock() {
 			case ErrorCode.INCORRECT_PASSWORD:
 				$toast.error($t("error.incorrect_password"));
 				break;
+			case ErrorCode.URL_NOT_FOUND:
+				$toast.error($t("error.url_not_found"));
+				break;
 			default:
 				$toast.error($t("error.default"));
 				break;

@@ -1,13 +1,12 @@
 <script setup lang="ts">
 defineOgImage("Basic.takumi");
-
 useSeoMeta({
-	title: "url shortener - solitar",
-	ogTitle: "url shortener - solitar",
-	twitterTitle: "url shortener - solitar",
-	description: "Create short URLS for your website and social media pages in seconds",
-	ogDescription: "Create short URLS for your website and social media pages in seconds",
-	twitterDescription: "Create short URLS for your website and social media pages in seconds",
+	title: $t("site.url_shortener.title"),
+	ogTitle: $t("site.url_shortener.og_title"),
+	twitterTitle: $t("site.url_shortener.og_title"),
+	description: $t("site.url_shortener.description"),
+	ogDescription: $t("site.url_shortener.description"),
+	twitterDescription: $t("site.url_shortener.description"),
 });
 </script>
 
