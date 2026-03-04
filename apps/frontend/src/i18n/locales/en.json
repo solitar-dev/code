@@ -93,6 +93,42 @@
 		}
 	},
 
+	"settings": {
+		"theme": {
+			"auto": "Auto",
+			"light": "Light",
+			"dark": "Dark"
+		}
+	},
+
+	"counter": "{count} links created that have been accessed {clicks} times",
+
+	"hero": {
+		"title": "The all-in-one tool that you need.",
+		"subtitle_1": "Solitar is an open source, powerful, everyday platform that lets you shorten long links, create instant QR codes.",
+		"subtitle_2": "Solitar delivers instant redirects with zero ad-interstitials, automate your workflow with our REST API and set flexible expiration dates for your links."
+	},
+
+	"not_secure_warning": {
+		"title": "Your connection is not private",
+		"description": "The link you're about to visit does not use HTTPS, which means your connection is not encrypted. Your data could be intercepted by third parties.",
+		"enforce_https": "Enforce HTTPS",
+		"accept_risk": "Accept Risk & Continue"
+	},
+
+	"unlock": {
+		"title": "The URL is locked",
+		"description": "The link you're about to visit has been locked by the creator. Please provide a password to unlock it"
+	},
+
+	"button": {
+		"download": "download",
+		"copy_url": "copy url",
+		"close": "close",
+		"unlock": "unlock",
+		"return": "return"
+	},
+
 	"error": {
 		"url_not_found": "URL not found",
 		"url_expired": "This URL is no longer available",

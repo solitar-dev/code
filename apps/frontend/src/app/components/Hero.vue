@@ -2,18 +2,14 @@
 	<div class="w-full flex flex-col md:flex-row items-start gap-5">
 		<div class="w-full flex flex-col gap-5">
 			<div class="">
-				<h1 class="text-6xl">
-					The <span class="text-primary">all-in-one</span> tool that you need.
-				</h1>
+				<h1 class="text-6xl font-semibold">{{ $t("hero.title") }}</h1>
 			</div>
 			<div class="text-fg-muted flex flex-col gap-5">
 				<p>
-					Solitar is an open source, powerful, everyday platform that lets you shorten
-					long links, create instant QR codes.
+					{{ $t("hero.subtitle_1") }}
 				</p>
 				<p>
-					Solitar delivers instant redirects with zero ad-interstitials, automate your
-					workflow with our REST API and set flexible expiration dates for your links.
+					{{ $t("hero.subtitle_2") }}
 				</p>
 			</div>
 			<Counter />

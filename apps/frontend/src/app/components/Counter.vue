@@ -11,9 +11,14 @@ const totalClicks = computed(() => data.value?.totalClicks ?? 0);
 <template>
 	<div class="">
 		<div class="w-full bg-gray-200 h-7 rounded-lg" v-if="pending" />
-		<p class="font-semibold text-lg" v-else>
-			<span class="text-2xl text-primary">{{ totalLinks }}</span> links created that have been
-			accessed <span class="text-2xl text-primary">{{ totalClicks }}</span> times
-		</p>
+		<i18n-t keypath="counter" tag="p" class="font-semibold text-lg" v-else>
+			<template #count>
+				<span class="text-2xl text-primary">{{ totalLinks }}</span>
+			</template>
+
+			<template #clicks>
+				<span class="text-2xl text-primary">{{ totalClicks }}</span>
+			</template>
+		</i18n-t>
 	</div>
 </template>

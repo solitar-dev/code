@@ -53,18 +53,18 @@ defineExpose({
 			<button
 				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) w-full sm:w-auto bg-bg"
 				@click="close">
-				Close
+				{{ $t("button.close") }}
 			</button>
 			<div class="flex items-center gap-2 flex-col-reverse sm:flex-row w-full sm:w-auto">
 				<button
 					@click="downloadQr"
 					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-					<i class="i-tabler-download"></i>Download
+					<i class="i-tabler-download"></i>{{ $t("button.download") }}
 				</button>
 				<button
 					@click="copyUrl"
 					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-					<i class="i-tabler-copy"></i>Copy URL
+					<i class="i-tabler-copy"></i>{{ $t("button.copy_url") }}
 				</button>
 			</div>
 		</div>

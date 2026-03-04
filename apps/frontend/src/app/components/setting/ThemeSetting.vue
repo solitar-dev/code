@@ -7,15 +7,15 @@ type Theme = {
 const themes: Theme[] = [
 	{
 		id: "system",
-		name: "auto",
+		name: $t("settings.theme.auto"),
 	},
 	{
 		id: "light",
-		name: "light",
+		name: $t("settings.theme.light"),
 	},
 	{
 		id: "dark",
-		name: "dark",
+		name: $t("settings.theme.dark"),
 	},
 ];
 

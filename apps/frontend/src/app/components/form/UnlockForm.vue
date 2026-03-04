@@ -65,11 +65,10 @@ async function unlock() {
 	<div class="container h-screen flex justify-center items-center">
 		<form class="border border-border rounded-lg max-w-xl" @submit.prevent="unlock">
 			<div class="p-5 flex flex-col gap-3">
-				<h1 class="text-2xl font-bold">The URL is locked</h1>
+				<h1 class="text-2xl font-bold">{{ $t("unlock.title") }}</h1>
 
 				<p class="text-fg-muted">
-					The link you're about to visit has been locked by the creator. Please provide a
-					password to unlock it
+					{{ $t("unlock.description") }}
 				</p>
 
 				<div class="">
@@ -97,9 +96,9 @@ async function unlock() {
 					class="p-2 border border-border rounded-lg hover:(cursor-pointer bg-gray-200) bg-bg"
 					type="button"
 					@click="goHome">
-					Return
+					{{ $t("button.return") }}
 				</button>
-				<button class="btn-primary p-2" type="submit">Unlock</button>
+				<button class="btn-primary p-2" type="submit">{{ $t("button.unlock") }}</button>
 			</div>
 		</form>
 	</div>
