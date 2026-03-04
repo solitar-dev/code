@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { maxLength, minLength, minValue, number, regex, required, string, url } from "@regle/rules";
+import { maxLength, minLength, minValue, number, required, string, url } from "@regle/rules";
 import { joinURL } from "ufo";
 
 type FormData = {
@@ -22,23 +22,23 @@ const state = ref<FormData>({
 
 const { r$ } = useRegle(state, {
 	longUrl: {
-		required: withMessage(required, "URL is required"),
-		url: withMessage(url, "Invalid URL"),
+		required: withMessage(required, $t("form.url.required")),
+		url: withMessage(url, $t("form.url.invalid")),
 	},
 	alias: {
-		string: withMessage(string, "Alias must be a string"),
-		minLength: withMessage(minLength(7), "Alias must be at least 7 characters"),
-		maxLength: withMessage(maxLength(255), "Alias must not exceed 255 characters"),
+		string: withMessage(string, $t("form.alias.invalid")),
+		minLength: withMessage(minLength(7), $t("form.alias.min")),
+		maxLength: withMessage(maxLength(255), $t("form.alias.max")),
 	},
 	password: {
-		string: withMessage(string, "Password must be a string"),
-		minLength: withMessage(minLength(3), "Password must be at least 3 characters"),
-		maxLength: withMessage(maxLength(255), "Password must not exceed 255 characters"),
+		string: withMessage(string, $t("form.password.invalid")),
+		minLength: withMessage(minLength(3), $t("form.password.min")),
+		maxLength: withMessage(maxLength(255), $t("form.password.max")),
 	},
 	expireTime: {
 		required,
-		number: withMessage(number, "Expiration time must be a number"),
-		minValue: withMessage(minValue(0), "Expiration time must be greater than 0"),
+		number: withMessage(number, $t("form.expire_time.invalid")),
+		minValue: withMessage(minValue(0), $t("form.expire_time.min")),
 	},
 	expireTimeUnit: {
 		required,
@@ -73,10 +73,15 @@ async function onSubmit() {
 
 		modal.value?.open({ url: joinURL(siteConfig.url, data.shortCode) });
 	} catch (error: any) {
-		if (!error.data) {
-			$toast.error("The server has been shutdown. Please try again later");
-		} else {
-			$toast.error(error.data.detail);
+		const e = error.data as { code: ErrorCode };
+
+		switch (e.code) {
+			case ErrorCode.SHORT_CODE_CONFLICT:
+				$toast.error($t("error.short_code_conflict"));
+				break;
+			default:
+				$toast.error($t("error.default"));
+				break;
 		}
 	}
 }

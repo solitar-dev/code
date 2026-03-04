@@ -51,5 +51,37 @@
 				"description": "Fully transparent redirection logic. Audit the code, host it yourself."
 			}
 		}
+	},
+
+	"form": {
+		"password": {
+			"empty": "Password cannot be empty",
+			"invalid": "Password must be a string",
+			"min": "Password must be at least 3 characters",
+			"max": "Password must not exceed 255 characters"
+		},
+		"url": {
+			"required": "URL is required",
+			"invalid": "Invalid URL"
+		},
+		"alias": {
+			"invalid": "ALias must be a string",
+			"min": "Alias must be at least 7 characters",
+			"max": "Alias must not exceed 255 characters"
+		},
+		"expire_time": {
+			"invalid": "Expiration time must be a number",
+			"min": "Expiration time must be greater than 0"
+		}
+	},
+
+	"error": {
+		"url_not_found": "URL not found",
+		"url_expired": "This URL is no longer available",
+		"url_disabled": "This URL has been disabled due to violation of terms",
+		"short_code_conflict": "This alias already exists.",
+		"password_protected": "Please provide a valid password to unlock this URL",
+		"incorrect_password": "The provided password is incorrect.",
+		"default": "Something went wrong"
 	}
 }

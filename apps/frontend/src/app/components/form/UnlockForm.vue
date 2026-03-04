@@ -16,7 +16,7 @@ const state = ref<FormData>({
 
 const { r$ } = useRegle(state, {
 	password: {
-		required: withMessage(required, "Password cannot be empty"),
+		required: withMessage(required, $t("form.password.empty")),
 	},
 });
 
@@ -44,9 +44,16 @@ async function unlock() {
 			redirectCode: 301,
 		});
 	} catch (error: any) {
-		const e = error.data as { title: string; detail: string };
+		const e = error.data as { code: ErrorCode };
 
-		$toast.error(e.detail);
+		switch (e.code) {
+			case ErrorCode.INCORRECT_PASSWORD:
+				$toast.error($t("error.incorrect_password"));
+				break;
+			default:
+				$toast.error($t("error.default"));
+				break;
+		}
 	}
 }
 </script>
