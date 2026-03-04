@@ -57,21 +57,25 @@ class UrlService(
     fun createUrl(data: UrlCreateDto): UrlEntity {
         val (url, expireTime, alias, password) = data
 
-        val hashedPassword =
-            if (password != null) {
-                argon2Encoder.encode(password)
-            } else {
-                null
-            }
+        val hashedPassword = password?.let { argon2Encoder.encode(it) }
 
         if (alias != null) {
             val existing = urlRepository.findByShortCode(alias)
 
             return if (existing != null) {
+                val isPasswordMatch =
+                    if (password == null && existing.password == null) {
+                        true
+                    } else if (password != null && existing.password != null) {
+                        argon2Encoder.matches(password, existing.password)
+                    } else {
+                        false
+                    }
+
                 if (
                     existing.originalUrl == url &&
                         existing.expiresAt == expireTime &&
-                        existing.password == null
+                        isPasswordMatch
                 ) {
                     existing
                 } else {
@@ -81,41 +85,33 @@ class UrlService(
                 createAndSaveUrl(url, alias, expireTime, hashedPassword)
             }
         } else {
-            if (expireTime == null) {
-                val existing =
+            val existingList =
+                if (expireTime == null) {
                     urlRepository.findByOriginalUrlAndExpiresAtIsNullAndHasAliasFalse(url)
-
-                if (existing.isEmpty()) {
-                    return createAndSaveUrl(url, alias, expireTime, hashedPassword)
-                }
-
-                existing.forEach {
-                    if (
-                        (password == null && it.password == null) ||
-                            argon2Encoder.matches(password, it.password)
-                    )
-                        return it
-                }
-
-                return createAndSaveUrl(url, null, null, hashedPassword)
-            } else {
-                val existing =
+                } else {
                     urlRepository.findByOriginalUrlAndExpiresAtAndHasAliasFalse(url, expireTime)
-
-                if (existing.isEmpty()) {
-                    return createAndSaveUrl(url, alias, expireTime, hashedPassword)
                 }
 
-                existing.forEach {
-                    if (
-                        (password == null && it.password == null) ||
-                            argon2Encoder.matches(password, it.password)
-                    )
-                        return it
-                }
-
+            if (existingList.isEmpty()) {
                 return createAndSaveUrl(url, null, expireTime, hashedPassword)
             }
+
+            existingList.forEach {
+                val isPasswordMatch =
+                    if (password == null && it.password == null) {
+                        true
+                    } else if (password != null && it.password != null) {
+                        argon2Encoder.matches(password, it.password)
+                    } else {
+                        false
+                    }
+
+                if (isPasswordMatch) {
+                    return it
+                }
+            }
+
+            return createAndSaveUrl(url, null, expireTime, hashedPassword)
         }
     }
 
