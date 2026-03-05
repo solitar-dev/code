@@ -1,6 +1,6 @@
 export const colors = {
-	"bg-base": "var(--bg-base)",
-	"bg-surface": "var(--bg-surface)",
+	base: "var(--bg-base)",
+	surface: "var(--bg-surface)",
 
 	"gray-100": "var(--gray-100)",
 	"gray-200": "var(--gray-200)",

@@ -25,6 +25,7 @@
 		"@types/node": "^25.0.3",
 		"@vitejs/plugin-vue": "^6.0.3",
 		"@vitest/browser-playwright": "^4.0.18",
+		"@vueuse/core": "^14.2.1",
 		"oxlint": "^1.50.0",
 		"oxlint-tsgolint": "^0.16.0",
 		"tsdown": "^0.18.1",
