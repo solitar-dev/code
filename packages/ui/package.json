@@ -10,11 +10,8 @@
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": "./dist/index.js",
-		"./package.json": "./package.json",
-		"./uno": "./dist/preset.js"
-	},
-	"publishConfig": {
-		"access": "public"
+		"./preset": "./dist/preset.js",
+		"./package.json": "./package.json"
 	},
 	"scripts": {
 		"build": "tsdown",
