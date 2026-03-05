@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Button } from "../../src";
+import { Kbd } from "../../src";
 </script>
 
 <template>
-	<Button label="AA" type="button" />
+	<Kbd value="A" />
 </template>
