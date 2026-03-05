@@ -32,11 +32,7 @@ items.forEach((item) => {
 	});
 });
 
-const isShowMenu = ref<boolean>(false);
-
-function onToggle() {
-	isShowMenu.value = !isShowMenu.value;
-}
+const [isShowMenu, toggleMenu] = useToggle();
 </script>
 
 <template>
@@ -56,7 +52,7 @@ function onToggle() {
 				<li class="block sm:hidden">
 					<button
 						class="flex items-center justify-center hover:bg-gray-200 p-2 rounded-lg"
-						@click="onToggle">
+						@click="toggleMenu()">
 						<i class="i-tabler-menu" v-if="!isShowMenu"></i>
 						<i class="i-tabler-x" v-if="isShowMenu"></i>
 					</button>
