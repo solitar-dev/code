@@ -19,6 +19,7 @@ build
 .kotlin
 .wrangler
 .data
+dist
 
 # IntelliJ
 .idea/
