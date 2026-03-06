@@ -1,5 +1,5 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-	plugins: ["vue", "vitest"],
+	plugins: ["vue"],
 });

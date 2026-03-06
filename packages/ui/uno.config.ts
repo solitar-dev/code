@@ -1,6 +1,6 @@
+import { presetSolitar } from "@solitar/tooling-config/uno";
 import { defineConfig } from "unocss";
-import { presetSolitar } from "./src/preset";
 
 export default defineConfig({
-	presets: [presetSolitar],
+	presets: [presetSolitar()],
 });
