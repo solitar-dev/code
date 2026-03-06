@@ -1,0 +1,21 @@
+{
+	"$schema": "https://www.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "esnext",
+		"verbatimModuleSyntax": true,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+
+		"moduleResolution": "bundler",
+		"module": "esnext",
+		"noEmit": true,
+
+		"lib": ["ESNext"]
+	}
+}
