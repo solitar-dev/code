@@ -1,0 +1,17 @@
+{
+	"name": "@solitar/assets",
+	"version": "0.0.0",
+	"private": "true",
+	"type": "module",
+	"exports": {
+		"./solitar.css": "./solitar.css"
+	},
+	"scripts": {
+		"lint": "stylelint '**/*.css'",
+		"lint:fix": "stylelint '**/*.css' --fix"
+	},
+	"devDependencies": {
+		"stylelint": "^17.4.0",
+		"stylelint-config-standard": "^40.0.0"
+	}
+}
