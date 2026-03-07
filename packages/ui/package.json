@@ -18,10 +18,12 @@
 		"build-storybook": "storybook build"
 	},
 	"dependencies": {
+		"@solitar/assets": "workspace:*",
 		"@solitar/tooling-config": "workspace:*",
 		"@vitejs/plugin-vue": "^6.0.4"
 	},
 	"devDependencies": {
+		"@iconify-json/lucide": "^1.2.95",
 		"@storybook/vue3-vite": "^10.2.15",
 		"oxlint": "^1.50.0",
 		"oxlint-tsgolint": "^0.16.0",
