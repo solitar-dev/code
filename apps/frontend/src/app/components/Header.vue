@@ -43,19 +43,20 @@ const [isShowMenu, toggleMenu] = useToggle();
 			</div>
 			<ul class="flex items-center gap-5">
 				<li v-for="item in items" class="hidden sm:block">
-					<NuxtLink
-						:to="item.path"
-						class="font-mono hover:bg-gray-200 rounded-lg p-2 duration-200 flex gap-1"
-						>{{ item.name }} <Kbd :value="item.kbd"
-					/></NuxtLink>
+					<NuxtLink :to="item.path"
+						><SButton variant="tertiary" class="font-mono flex gap-1">
+							<template #label
+								>{{ item.name }} <SKbd :label="item.kbd"
+							/></template> </SButton
+					></NuxtLink>
 				</li>
 				<li class="block sm:hidden">
-					<button
-						class="flex items-center justify-center hover:bg-gray-200 p-2 rounded-lg"
-						@click="toggleMenu()">
-						<i class="i-tabler-menu" v-if="!isShowMenu"></i>
-						<i class="i-tabler-x" v-if="isShowMenu"></i>
-					</button>
+					<SButton @click="toggleMenu()" variant="tertiary">
+						<template #label>
+							<i class="i-tabler-menu" v-if="!isShowMenu"></i>
+							<i class="i-tabler-x" v-if="isShowMenu"></i>
+						</template>
+					</SButton>
 				</li>
 			</ul>
 		</nav>

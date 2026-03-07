@@ -1,11 +1,22 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 type Props = {
 	label?: string;
+	class?: string | string[] | Record<string, boolean>;
 };
 
-withDefaults(defineProps<Props>(), { label: "" });
+const props = withDefaults(defineProps<Props>(), { label: "" });
+
+const kbdClass = computed(() => [
+	"border border-default bg-surface rounded-lg px-2",
+
+	props.class,
+]);
 </script>
 
 <template>
-	<kbd class="border border-default bg-surface rounded-lg px-1">{{ label }}</kbd>
+	<div :class="kbdClass">
+		{{ label }}
+	</div>
 </template>
