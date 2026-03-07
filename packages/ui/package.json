@@ -23,15 +23,15 @@
 		"@vitejs/plugin-vue": "^6.0.4"
 	},
 	"devDependencies": {
-		"@iconify-json/lucide": "^1.2.95",
-		"@storybook/vue3-vite": "^10.2.15",
+		"@iconify-json/lucide": "^1.2.96",
+		"@storybook/vue3-vite": "^10.2.16",
 		"oxlint": "catalog:lint",
 		"oxlint-tsgolint": "catalog:lint",
-		"storybook": "^10.2.15",
+		"storybook": "^10.2.16",
 		"typescript": "5.9.2",
 		"unocss": "catalog:frontend",
 		"vite": "^7.3.1",
-		"vue": "^3.5.28"
+		"vue": "^3.5.29"
 	},
 	"peerDependencies": {
 		"typescript": "5.9.2",
