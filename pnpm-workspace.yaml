@@ -17,4 +17,7 @@ catalogs:
     oxlint: ^1.51.0
     oxlint-tsgolint: ^0.16.0
     oxfmt: ^0.36.0
+  script:
     lefthook: ^2.1.2
+  frontend:
+    unocss: ^66.6.6

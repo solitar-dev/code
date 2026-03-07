@@ -13,7 +13,7 @@
 		"postinstall": "lefthook install"
 	},
 	"devDependencies": {
-		"lefthook": "catalog:lint",
+		"lefthook": "catalog:script",
 		"oxfmt": "catalog:lint",
 		"turbo": "catalog:build"
 	},
