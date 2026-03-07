@@ -15,7 +15,6 @@ export default defineNuxtModule({
 			path: resolver.resolve("./components"),
 			prefix: "S",
 			pathPrefix: false,
-			global: true,
 		});
 	},
 });
