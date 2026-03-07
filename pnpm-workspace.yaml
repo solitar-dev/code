@@ -9,3 +9,8 @@ allowBuilds:
   sharp: true
   vue-demi: true
   workerd: true
+
+catalogs:
+  lint:
+    oxlint: ^1.51.0
+    oxlint-tsgolint: ^0.16.0

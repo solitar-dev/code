@@ -17,8 +17,8 @@
 	},
 	"devDependencies": {
 		"@vue/tsconfig": "^0.9.0",
-		"oxlint": "^1.50.0",
-		"oxlint-tsgolint": "^0.16.0"
+		"oxlint": "catalog:lint",
+		"oxlint-tsgolint": "catalog:lint"
 	},
 	"peerDependencies": {
 		"typescript": "5.9.2",
