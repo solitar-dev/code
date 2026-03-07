@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import Kbd from "../../components/base/Kbd.vue";
+import Kbd from "../../components/base/kbd.vue";
 
 const meta = {
 	title: "Base/Kbd",
