@@ -4,6 +4,7 @@
 		"vitest.explorer",
 		"Vue.volar",
 		"antfu.unocss",
-		"arktypeio.arkdark"
+		"arktypeio.arkdark",
+		"antfu.pnpm-catalog-lens"
 	]
 }

@@ -11,6 +11,10 @@ allowBuilds:
   workerd: true
 
 catalogs:
+  build:
+    turbo: ^2.8.10
   lint:
     oxlint: ^1.51.0
     oxlint-tsgolint: ^0.16.0
+    oxfmt: ^0.36.0
+    lefthook: ^2.1.2
