@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   build:
+    '@nuxt/kit':
+      specifier: ^4.3.1
+      version: 4.3.1
     turbo:
       specifier: ^2.8.14
       version: 2.8.14
@@ -67,6 +70,15 @@ importers:
       '@regle/rules':
         specifier: ^1.20.1
         version: 1.20.1(pinia@3.0.4(typescript@5.9.2)(vue@3.5.29(typescript@5.9.2)))(vue@3.5.29(typescript@5.9.2))
+      '@solitar/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
+      '@solitar/tooling-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling-config
+      '@solitar/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@vueuse/integrations':
         specifier: ^14.2.1
         version: 14.2.1(fuse.js@7.1.0)(qrcode@1.5.4)(vue@3.5.29(typescript@5.9.2))
@@ -155,6 +167,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@nuxt/kit':
+        specifier: catalog:build
+        version: 4.3.1(magicast@0.5.2)
       '@solitar/assets':
         specifier: workspace:*
         version: link:../assets

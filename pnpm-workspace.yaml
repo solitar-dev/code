@@ -13,6 +13,7 @@ allowBuilds:
 catalogs:
   build:
     turbo: ^2.8.14
+    "@nuxt/kit": ^4.3.1
   lint:
     oxlint: ^1.51.0
     oxlint-tsgolint: ^0.16.0
