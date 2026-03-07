@@ -8,8 +8,9 @@ export default defineNuxtConfig({
 		"nuxt-og-image",
 		"vue-sonner/nuxt",
 		"@nuxtjs/i18n",
+		"@solitar/ui/nuxt",
 	],
-	css: ["~/assets/css/main.css"],
+	css: ["@solitar/assets/solitar.css", "~/assets/css/main.css"],
 	srcDir: "src/app",
 	dir: {
 		public: "src/public",

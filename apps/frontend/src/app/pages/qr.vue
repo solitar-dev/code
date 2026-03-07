@@ -72,16 +72,8 @@ function downloadQr() {
 		</div>
 		<div
 			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono">
-			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) bg-bg"
-				@click="closeModal">
-				Close
-			</button>
-			<button
-				@click="downloadQr"
-				class="flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-				<i class="i-tabler-download"></i>Download
-			</button>
+			<SButton label="Close" @click="closeModal" />
+			<SButton label="Download" leading-icon="i-tabler-download" @click="downloadQr" />
 		</div>
 	</dialog>
 	<div class="container-sm max-w-2xl h-screen flex justify-center items-center flex-col gap-2">
