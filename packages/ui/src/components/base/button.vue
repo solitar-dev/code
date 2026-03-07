@@ -24,7 +24,7 @@ const variantClasses: Record<string, string> = {
 };
 
 const buttonClass = computed(() => [
-	"p-2 rounded-lg hover:cursor-pointer flex flex-row items-center justify-center gap-1",
+	"p-2 rounded-lg hover:cursor-pointer flex flex-row items-center justify-center gap-1 duration-200",
 	variantClasses[props.variant],
 	props.class,
 ]);
