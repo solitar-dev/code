@@ -28,13 +28,8 @@
 		"oxlint": "catalog:lint",
 		"oxlint-tsgolint": "catalog:lint",
 		"storybook": "^10.2.16",
-		"typescript": "5.9.2",
 		"unocss": "catalog:frontend",
 		"vite": "^7.3.1",
-		"vue": "^3.5.29"
-	},
-	"peerDependencies": {
-		"typescript": "5.9.2",
-		"vue": "^3.5.28"
+		"vue": "catalog:frontend"
 	}
 }
