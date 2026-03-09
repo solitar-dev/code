@@ -9,7 +9,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), { label: "" });
 
 const kbdClass = computed(() => [
-	"border border-default bg-surface rounded-lg px-2",
+	"border border-default bg-surface rounded-lg px-2 w-fit",
 
 	props.class,
 ]);
