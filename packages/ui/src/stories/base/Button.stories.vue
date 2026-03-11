@@ -139,12 +139,14 @@ const { Story } = defineMeta({
 
 	<!-- All variants -->
 	<Story name="AllVariants">
-		<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-			<Button label="Default" variant="default" />
-			<Button label="Error" variant="error" />
-			<Button label="Warning" variant="warning" />
-			<Button label="Secondary" variant="secondary" />
-			<Button label="Tertiary" variant="tertiary" />
-		</div>
+		<template #template>
+			<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+				<Button label="Default" variant="default" />
+				<Button label="Error" variant="error" />
+				<Button label="Warning" variant="warning" />
+				<Button label="Secondary" variant="secondary" />
+				<Button label="Tertiary" variant="tertiary" />
+			</div>
+		</template>
 	</Story>
 </template>
