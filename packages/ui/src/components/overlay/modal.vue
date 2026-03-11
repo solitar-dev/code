@@ -3,8 +3,10 @@ import { computed, useTemplateRef, watch } from "vue";
 
 type Props = {
 	title?: string;
-	active: boolean;
 	class?: string | string[] | Record<string, boolean>;
+	isOpen: boolean;
+	openModal: () => void;
+	closeModal: () => void;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,9 +20,9 @@ const modalClass = computed(() => [
 const modal = useTemplateRef("modal");
 
 watch(
-	() => props.active,
-	(isActive) => {
-		if (isActive) {
+	() => props.isOpen,
+	(isOpen) => {
+		if (isOpen) {
 			modal.value?.showModal();
 		} else if (modal.value?.open) {
 			modal.value?.close();
@@ -30,11 +32,17 @@ watch(
 		immediate: true,
 	},
 );
+
+function handleBackdropClick(event: MouseEvent) {
+	if (event.target === modal.value) {
+		props.closeModal();
+	}
+}
 </script>
 
 <template>
-	<dialog ref="modal" :class="modalClass">
-		<div class="px-5 py-8">
+	<dialog ref="modal" :class="modalClass" @click="handleBackdropClick">
+		<div class="p-5 flex flex-col">
 			<div class="">
 				<slot name="title">
 					<h1 class="text-default text-2xl font-semibold">{{ title }}</h1>

@@ -1,4 +1,4 @@
-import { addComponentsDir, createResolver, defineNuxtModule } from "@nuxt/kit";
+import { addComponentsDir, addImportsDir, createResolver, defineNuxtModule } from "@nuxt/kit";
 
 export default defineNuxtModule({
 	meta: {
@@ -16,5 +16,7 @@ export default defineNuxtModule({
 			prefix: "S",
 			pathPrefix: false,
 		});
+
+		addImportsDir(resolver.resolve("./composables"));
 	},
 });
