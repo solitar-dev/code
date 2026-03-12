@@ -15,7 +15,8 @@
 	"devDependencies": {
 		"lefthook": "catalog:script",
 		"oxfmt": "catalog:lint",
-		"turbo": "catalog:build"
+		"turbo": "catalog:build",
+		"typescript": "catalog:types"
 	},
 	"engines": {
 		"node": "^25"

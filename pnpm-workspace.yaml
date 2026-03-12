@@ -24,3 +24,5 @@ catalogs:
     vue: ^3.5.29
     unocss: ^66.6.6
     sb-addon-vue-csf: ^0.0.2
+  types:
+    typescript: ^5.9.3
