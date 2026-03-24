@@ -29,7 +29,7 @@ const footerItems: FooterColumn[] = [
 			},
 			{
 				name: $t("footer.item.status"),
-				link: "https://status.solitar.io.vn",
+				link: "https://status.solitar.link",
 			},
 		],
 	},
