@@ -25,3 +25,6 @@ storybook-static
 
 # IntelliJ
 .idea/
+
+# Astro
+.astro
