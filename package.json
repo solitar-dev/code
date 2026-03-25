@@ -19,7 +19,7 @@
 		"typescript": "catalog:types"
 	},
 	"engines": {
-		"node": "^25"
+		"node": ">=22"
 	},
 	"packageManager": "pnpm@10.30.3"
 }
