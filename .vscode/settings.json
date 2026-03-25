@@ -1,6 +1,7 @@
 {
 	"oxc.fmt.configPath": ".oxfmtrc.json",
 	"oxc.typeAware": true,
+
 	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
@@ -9,9 +10,13 @@
 	"editor.quickSuggestions": {
 		"strings": "on"
 	},
+
 	"workbench.editorAssociations": {
 		"*.svg": "default"
 	},
-	"typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
+
+	"js/ts.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
+	"js/ts.tsdk.path": "node_modules/typescript/lib",
+
 	"cSpell.words": ["Solitär"]
 }

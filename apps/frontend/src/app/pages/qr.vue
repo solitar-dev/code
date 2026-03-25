@@ -27,11 +27,9 @@ const schema = type({
 	url: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
 });
 
-const modal = useTemplateRef("modal");
-
 function generateQr() {
 	url.value = inputUrl.value;
-	modal.value?.showModal();
+	openModal();
 }
 
 async function pasteUrl() {
@@ -46,44 +44,38 @@ function clearUrl() {
 	inputUrl.value = "";
 }
 
-function closeModal() {
-	modal.value?.close();
-}
-
 function downloadQr() {
 	const a = document.createElement("a");
 	a.href = qrCode.value.value;
 	a.download = "qr.png";
 	a.click();
 }
+
+const { isOpen, closeModal, openModal } = useModal();
 </script>
 
 <template>
-	<dialog
-		ref="modal"
-		class="w-11/12 max-w-xl m-auto backdrop:bg-bg/50 shadow-xl bg-bg border-border border rounded-lg">
-		<div class="bg-bg p-5 rounded-t-lg">
-			<h1 class="text-fg text-lg font-mono font-bold">Your QR Code</h1>
-			<div class="w-full flex justify-center py-5">
+	<SModal
+		:is-open
+		:close-modal
+		:open-modal
+		title="Your QR Code:"
+		class="w-11/12 max-w-xl font-mono">
+		<template #body>
+			<div class="flex justify-center items-center">
 				<div class="p-1 border border-border rounded-lg">
 					<img :src="qrCode.value" />
 				</div>
 			</div>
-		</div>
-		<div
-			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono">
-			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) bg-bg"
-				@click="closeModal">
-				Close
-			</button>
-			<button
-				@click="downloadQr"
-				class="flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-				<i class="i-tabler-download"></i>Download
-			</button>
-		</div>
-	</dialog>
+		</template>
+		<template #footer>
+			<div class="flex items-center justify-between font-mono">
+				<SButton label="Close" @click="closeModal" />
+				<SButton label="Download" leading-icon="i-tabler-download" @click="downloadQr" />
+			</div>
+		</template>
+	</SModal>
+
 	<div class="container-sm max-w-2xl h-screen flex justify-center items-center flex-col gap-2">
 		<div
 			class="relative flex items-center border-2 border-border rounded-lg w-full group focus-within:(border-border-active)">

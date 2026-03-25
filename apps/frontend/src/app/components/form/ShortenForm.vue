@@ -48,7 +48,8 @@ const { r$ } = useRegle(state, {
 const { $api, $toast } = useNuxtApp();
 const urlRepository = repository($api);
 const siteConfig = useSiteConfig();
-const modal = useTemplateRef("modal");
+const shortenUrl = ref("");
+const { isOpen, openModal, closeModal } = useModal();
 
 async function onSubmit() {
 	const result = await r$.$validate();
@@ -71,7 +72,8 @@ async function onSubmit() {
 	try {
 		const data = await urlRepository.shortenUrl(body);
 
-		modal.value?.open({ url: joinURL(siteConfig.url, data.shortCode) });
+		shortenUrl.value = joinURL(siteConfig.url, data.shortCode);
+		openModal();
 	} catch (error: any) {
 		const e = error.data as { code: ErrorCode };
 
@@ -88,7 +90,7 @@ async function onSubmit() {
 </script>
 
 <template>
-	<ShortenUrlResult ref="modal" />
+	<ShortenUrlResult :is-open :open-modal :close-modal :url="shortenUrl" />
 	<form
 		class="flex flex-col gap-3 border border-border p-5 rounded-lg font-mono"
 		@submit.prevent="onSubmit">

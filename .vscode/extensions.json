@@ -1,3 +1,10 @@
 {
-	"recommendations": ["oxc.oxc-vscode", "Vue.volar", "antfu.unocss", "arktypeio.arkdark"]
+	"recommendations": [
+		"oxc.oxc-vscode",
+		"vitest.explorer",
+		"Vue.volar",
+		"antfu.unocss",
+		"arktypeio.arkdark",
+		"antfu.pnpm-catalog-lens"
+	]
 }

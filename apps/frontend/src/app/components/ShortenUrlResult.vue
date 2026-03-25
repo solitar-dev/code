@@ -1,72 +1,67 @@
 <script setup lang="ts">
 import { useQRCode } from "@vueuse/integrations/useQRCode";
 
-const modal = useTemplateRef("modal");
-const url = ref("");
-const qrCode = useQRCode(url);
+type Props = {
+	url: string;
+	isOpen: boolean;
+	openModal: () => void;
+	closeModal: () => void;
+};
+
+const { url } = defineProps<Props>();
+
+const qrCode = computed(() => useQRCode(url));
 const { copy } = useClipboard();
 const { $toast } = useNuxtApp();
 
-function close() {
-	modal.value?.close();
-}
-
 function copyUrl() {
-	copy(url.value);
+	copy(url);
 	$toast.success("Copied");
 }
 
 function downloadQr() {
 	const a = document.createElement("a");
-	a.href = qrCode.value;
+	a.href = qrCode.value.value;
 	a.download = "qr.png";
 	a.click();
 }
-
-defineExpose({
-	open: (data: { url: string }) => {
-		url.value = data.url;
-		modal.value?.showModal();
-	},
-});
 </script>
 
 <template>
-	<dialog
-		ref="modal"
-		class="w-11/12 max-w-xl m-auto backdrop:bg-bg/50 shadow-xl bg-bg border-border border rounded-lg">
-		<div class="bg-bg p-5 rounded-t-lg">
+	<SModal :is-open :open-modal :close-modal class="w-11/12 max-w-xl font-mono">
+		<template #title>
 			<NuxtLink
 				:to="url"
 				class="text-fg text-lg font-mono font-bold underline-link"
 				target="_blank"
 				>{{ url }}<i class="i-tabler-external-link align-top"></i
 			></NuxtLink>
-			<div class="w-full flex justify-center py-5">
+		</template>
+
+		<template #body>
+			<div class="flex justify-center items-center">
 				<div class="p-1 border border-border rounded-lg">
-					<img :src="qrCode" />
+					<img :src="qrCode.value" />
 				</div>
 			</div>
-		</div>
-		<div
-			class="border-t border-t-border bg-bg-muted p-5 flex items-center justify-between font-mono flex-col-reverse sm:flex-row gap-5">
-			<button
-				class="text-fg border-border border rounded-lg p-2 hover:(cursor-pointer bg-gray-200) w-full sm:w-auto bg-bg"
-				@click="close">
-				{{ $t("button.close") }}
-			</button>
-			<div class="flex items-center gap-2 flex-col-reverse sm:flex-row w-full sm:w-auto">
-				<button
-					@click="downloadQr"
-					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-					<i class="i-tabler-download"></i>{{ $t("button.download") }}
-				</button>
-				<button
-					@click="copyUrl"
-					class="w-full flex justify-center items-center gap-1 text-gray-100 p-2 border border-border rounded-lg bg-gray-1000 hover:(bg-gray-1000/90 cursor-pointer)">
-					<i class="i-tabler-copy"></i>{{ $t("button.copy_url") }}
-				</button>
+		</template>
+
+		<template #footer>
+			<div class="flex items-center justify-between flex-col-reverse sm:flex-row gap-5">
+				<SButton :label="$t('button.close')" variant="secondary" @click="closeModal" />
+				<div class="flex items-center gap-2 flex-col-reverse sm:flex-row w-full sm:w-auto">
+					<SButton
+						:label="$t('button.download')"
+						variant="default"
+						@click="downloadQr"
+						leading-icon="i-tabler-download" />
+					<SButton
+						:label="$t('button.copy_url')"
+						variant="default"
+						@click="copyUrl"
+						leading-icon="i-tabler-copy" />
+				</div>
 			</div>
-		</div>
-	</dialog>
+		</template>
+	</SModal>
 </template>

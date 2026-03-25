@@ -29,7 +29,7 @@ const footerItems: FooterColumn[] = [
 			},
 			{
 				name: $t("footer.item.status"),
-				link: "https://status.solitar.io.vn",
+				link: "https://status.solitar.link",
 			},
 		],
 	},
@@ -42,7 +42,7 @@ const footerItems: FooterColumn[] = [
 			},
 			{
 				name: $t("footer.item.api"),
-				link: "/api",
+				link: "https://docs.solitar.link",
 			},
 		],
 	},
@@ -51,15 +51,15 @@ const footerItems: FooterColumn[] = [
 		items: [
 			{
 				name: $t("footer.item.terms_of_use"),
-				link: "/terms",
+				link: "https://docs.solitar.link/legal/terms",
 			},
 			{
 				name: $t("footer.item.privacy_policy"),
-				link: "/privacy",
+				link: "https://docs.solitar.link/legal/privacy",
 			},
 			{
 				name: $t("footer.item.report"),
-				link: "/report",
+				link: "https://docs.solitar.link/legal/report",
 			},
 		],
 	},

@@ -1,0 +1,13 @@
+{
+	"extends": "@solitar/tooling-config/typescript/vue.json",
+	"compilerOptions": {
+		"types": ["vite/client"]
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.vue",
+		"vite.config.ts",
+		"uno.config.ts",
+		"oxlint.config.ts"
+	]
+}

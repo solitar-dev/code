@@ -1,12 +1,7 @@
 [tools]
 java = "liberica-21"
-node = "24"
-
-[hooks]
-postinstall = "npx corepack enable"
-
-[settings]
-experimental = true
+node = "25"
+pnpm = "10.30.3"
 
 [env]
 _.file = ["apps/backend/.env.local", "apps/frontend/.env.local"]

@@ -9,3 +9,53 @@ allowBuilds:
   sharp: true
   vue-demi: true
   workerd: true
+
+catalogs:
+  build:
+    turbo: ^2.8.14
+    "@nuxt/kit": ^4.3.1
+    "@vitejs/plugin-vue": "^6.0.4"
+    "vite": "^7.3.1"
+    "wrangler": "^4.71.0"
+  lint:
+    oxlint: ^1.51.0
+    oxlint-tsgolint: ^0.16.0
+    oxfmt: ^0.36.0
+    "stylelint": "^17.4.0"
+    "stylelint-config-standard": "^40.0.0"
+  script:
+    lefthook: ^2.1.2
+  frontend:
+    vue: ^3.5.29
+    unocss: ^66.6.6
+    sb-addon-vue-csf: ^0.0.2
+    "@storybook/vue3-vite": "^10.2.16"
+    "storybook": "^10.2.16"
+    "@iconify-json/lucide": "^1.2.96"
+    "@iconify-json/tabler": "^1.2.30"
+    "arktype": "^2.2.0"
+    "dayjs": "^1.11.19"
+    "nuxt": "^4.3.1"
+    "qrcode": "^1.5.4"
+    "ufo": "^1.6.3"
+    "vue-router": "^4.6.4"
+    "vue-sonner": "^2.0.9"
+    "@nuxt/fonts": "^0.14.0"
+    "@nuxtjs/color-mode": "^4.0.0"
+    "@nuxtjs/i18n": "10.2.3"
+    "@regle/core": "^1.20.1"
+    "@regle/nuxt": "^1.20.1"
+    "@regle/rules": "^1.20.1"
+    "@vueuse/integrations": "^14.2.1"
+    "@takumi-rs/core": "^0.69.5"
+    "@takumi-rs/wasm": "^0.69.5"
+    "@unocss/nuxt": "^66.6.6"
+    "@vueuse/core": "^14.2.1"
+    "@vueuse/nuxt": "^14.2.1"
+    "nuxt-og-image": "6.0.0-beta.42"
+    "@astrojs/starlight": "^0.38.2"
+    "astro": "^6.0.1"
+    "sharp": "^0.34.2"
+  types:
+    typescript: ^5.9.3
+    "@vue/tsconfig": "^0.9.0"

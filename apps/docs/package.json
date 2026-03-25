@@ -1,0 +1,24 @@
+{
+	"name": "@solitar/docs",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/starlight": "catalog:frontend",
+		"astro": "catalog:frontend",
+		"sharp": "catalog:frontend"
+	},
+	"devDependencies": {
+		"wrangler": "catalog:build"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"packageManager": "pnpm@10.30.3"
+}

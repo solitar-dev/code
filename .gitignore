@@ -19,6 +19,12 @@ build
 .kotlin
 .wrangler
 .data
+dist
+*storybook.log
+storybook-static
 
 # IntelliJ
 .idea/
+
+# Astro
+.astro

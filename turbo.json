@@ -5,8 +5,7 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": [".output/**", "build/**"],
-			"env": ["SPRING_PROFILES_ACTIVE"]
+			"outputs": [".output/**", "build/**", "dist/**"]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
