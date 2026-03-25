@@ -13,5 +13,9 @@
 		"@astrojs/starlight": "catalog:frontend",
 		"astro": "catalog:frontend",
 		"sharp": "catalog:frontend"
-	}
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"packageManager": "pnpm@10.30.3"
 }
