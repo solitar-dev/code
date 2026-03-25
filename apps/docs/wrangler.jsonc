@@ -1,0 +1,16 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2025-07-15",
+	"name": "docs",
+	"placement": {
+		"mode": "smart",
+	},
+	"preview_urls": true,
+	"workers_dev": true,
+	"routes": [{ "pattern": "docs.solitar.link", "custom_domain": true }],
+	"env": {
+		"staging": {
+			"routes": [{ "pattern": "staging-docs.solitar.link", "custom_domain": true }],
+		},
+	},
+}
