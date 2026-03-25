@@ -8,12 +8,16 @@ export default defineConfig({
 		starlight({
 			title: "Solitar",
 			social: [
-				{ icon: "github", label: "GitHub", href: "https://github.com/withastro/starlight" },
+				{ icon: "github", label: "GitHub", href: "https://github.com/solitar-dev/code" },
 			],
 			sidebar: [
 				{
 					label: "Legal",
 					autogenerate: { directory: "legal" },
+				},
+				{
+					label: "API",
+					autogenerate: { directory: "api" },
 				},
 			],
 			head: [
