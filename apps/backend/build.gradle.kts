@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.2.21"
     kotlin("plugin.spring") version "2.2.21"
     kotlin("plugin.jpa") version "2.2.21"
-    id("org.springframework.boot") version "4.0.2"
+    id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
 
     id("com.diffplug.spotless") version "8.1.0"
@@ -15,7 +15,7 @@ version = "1.0.0"
 
 description = "A simple URL shortener"
 
-java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
+java { toolchain { languageVersion = JavaLanguageVersion.of(24) } }
 
 repositories { mavenCentral() }
 
@@ -35,7 +35,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.bouncycastle:bcprov-jdk18on:1.84")
-    implementation("io.github.wimdeblauwe:error-handling-spring-boot-starter:5.1.0")
+    implementation("io.github.wimdeblauwe:error-handling-spring-boot-starter:5.1.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

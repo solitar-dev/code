@@ -1,11 +1,11 @@
-FROM bellsoft/liberica-runtime-container:jdk-21-musl AS builder
+FROM bellsoft/liberica-runtime-container:jdk-24-musl AS builder
 WORKDIR /build
 
 COPY apps/backend .
 RUN ./gradlew bootJar
 
 
-FROM bellsoft/liberica-runtime-container:jdk-21-musl 
+FROM bellsoft/liberica-runtime-container:jdk-24-musl
 WORKDIR /app
 
 COPY --from=builder /build/build/libs/*.jar server.jar

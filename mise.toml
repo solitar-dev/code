@@ -1,5 +1,5 @@
 [tools]
-java = "liberica-21"
+java = "liberica-24"
 node = "25"
 pnpm = "10.30.3"
 
