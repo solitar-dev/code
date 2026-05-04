@@ -1,12 +1,12 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.spring") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
-    id("org.springframework.boot") version "4.0.6"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.spring") version "2.3.20"
+    kotlin("plugin.jpa") version "2.3.20"
+    id("org.springframework.boot") version "4.1.0-RC1"
     id("io.spring.dependency-management") version "1.1.7"
 
     id("org.graalvm.buildtools.native") version "1.1.0"
-    id("com.diffplug.spotless") version "8.1.0"
+    id("com.diffplug.spotless") version "8.4.0"
     idea
 }
 
@@ -16,7 +16,7 @@ version = "1.0.0"
 
 description = "A simple URL shortener"
 
-java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
+java { toolchain { languageVersion = JavaLanguageVersion.of(25) } }
 
 repositories { mavenCentral() }
 
@@ -67,7 +67,7 @@ spotless {
     encoding("UTF-8")
 
     kotlin {
-        ktfmt().kotlinlangStyle().configure {
+        ktfmt("0.62").kotlinlangStyle().configure {
             it.setMaxWidth(100)
             it.setBlockIndent(4)
             it.setContinuationIndent(4)
