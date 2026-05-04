@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
 
+    id("org.graalvm.buildtools.native") version "1.1.0"
     id("com.diffplug.spotless") version "8.1.0"
     idea
 }
@@ -15,7 +16,7 @@ version = "1.0.0"
 
 description = "A simple URL shortener"
 
-java { toolchain { languageVersion = JavaLanguageVersion.of(24) } }
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
 repositories { mavenCentral() }
 

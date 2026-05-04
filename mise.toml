@@ -1,5 +1,5 @@
 [tools]
-java = "liberica-24"
+java = "graalvm-community-21"
 node = "25"
 pnpm = "10.30.3"
 
