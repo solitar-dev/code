@@ -9,3 +9,6 @@ app:
   cors:
     allowed-origins:
       - "https://solitar.link"
+  rate-limiter:
+    capacity: 1000
+    refill-period-in-seconds: 3600

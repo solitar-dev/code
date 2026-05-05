@@ -27,3 +27,9 @@ class PasswordProtectedException(
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 class IncorrectPasswordException(message: String = "The provided password is incorrect.") :
     RuntimeException(message)
+
+@ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+class RateLimitExceededException(
+    val retryAfterSeconds: Long,
+    message: String = "Too many requests. Please try again later.",
+) : RuntimeException(message)
