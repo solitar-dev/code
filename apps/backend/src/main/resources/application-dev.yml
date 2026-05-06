@@ -9,3 +9,9 @@ app:
     allowed-origins:
       - "http://localhost:3000"
       - "https://staging.solitar.link"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

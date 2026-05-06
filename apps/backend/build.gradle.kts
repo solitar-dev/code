@@ -35,6 +35,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.bouncycastle:bcprov-jdk18on:1.84")
     implementation("io.github.wimdeblauwe:error-handling-spring-boot-starter:5.1.1")
     implementation("com.bucket4j:bucket4j_jdk17-core:8.18.0")
