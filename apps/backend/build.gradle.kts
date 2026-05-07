@@ -44,7 +44,9 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test") {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
     runtimeOnly("org.postgresql:postgresql")

@@ -17,6 +17,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  profiles:
+    default: prod
 
 server:
   forward-headers-strategy: framework
