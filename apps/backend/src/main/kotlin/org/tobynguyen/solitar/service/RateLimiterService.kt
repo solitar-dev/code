@@ -11,7 +11,7 @@ class RateLimiterService(
     private val bucketConfiguration: BucketConfiguration,
 ) {
     fun tryConsumeAndReturnRemaining(key: String): ConsumptionProbe {
-        val bucket = proxyManager.getProxy(key, ::bucketConfiguration)
+        val bucket = proxyManager.getProxy("ratelimit:$key", ::bucketConfiguration)
 
         return bucket.tryConsumeAndReturnRemaining(1)
     }
