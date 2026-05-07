@@ -9,6 +9,9 @@ app:
     allowed-origins:
       - "http://localhost:3000"
       - "https://staging.solitar.link"
+  rate-limiter:
+    capacity: 10
+    refill-period-in-seconds: 30
 
 management:
   endpoints:
