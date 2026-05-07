@@ -9,3 +9,15 @@ app:
   cors:
     allowed-origins:
       - "https://solitar.link"
+  rate-limiter:
+    capacity: 1000
+    refill-period-in-seconds: 3600
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"

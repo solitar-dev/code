@@ -17,6 +17,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  profiles:
+    default: prod
 
 server:
+  forward-headers-strategy: framework
   port: ${SERVER_PORT:8080}

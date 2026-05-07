@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import org.tobynguyen.solitar.config.properties.AppCorsConfig
+import org.tobynguyen.solitar.config.properties.AppConfig
 
 @SpringBootApplication
-@EnableConfigurationProperties(AppCorsConfig::class)
+@EnableConfigurationProperties(AppConfig::class)
 @RestController
 class SolitarApplication {
     @GetMapping fun index(): String = "Hello World"
