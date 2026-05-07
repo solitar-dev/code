@@ -35,7 +35,7 @@ class RateLimiterConfig(private val appConfig: AppConfig) {
         return BucketConfiguration.builder()
             .addLimit {
                 it.capacity(appConfig.rateLimiter.capacity)
-                    .refillGreedy(
+                    .refillIntervally(
                         appConfig.rateLimiter.capacity,
                         Duration.ofSeconds(appConfig.rateLimiter.refillPeriodInSeconds),
                     )
