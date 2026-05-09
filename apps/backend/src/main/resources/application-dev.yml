@@ -12,9 +12,3 @@ app:
   rate-limiter:
     capacity: 10
     refill-period-in-seconds: 30
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
