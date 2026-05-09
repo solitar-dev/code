@@ -1,19 +1,16 @@
 name: solitar
 services:
-  postgres_db:
-    image: postgres:18-alpine
-    container_name: solitar-postgres
+  cockroach_db:
+    image: cockroachdb/cockroach:v25.4.8
+    container_name: solitar-cockroach
     volumes:
-      - db-data:/var/lib/postgresql
+      - db-data:/cockroach/cockroach-data
     ports:
-      - "127.0.0.1:5432:5432"
-    environment:
-      POSTGRES_USER: solitar
-      POSTGRES_PASSWORD: solitar
-      POSTGRES_HOST_AUTH_METHOD: trust
-      PGUSER: solitar
+      - "127.0.0.1:26257:26257"
+      - "127.0.0.1:26258:26258"
+    command: start-single-node --insecure --http-addr=0.0.0.0:26258
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "solitar"]
+      test: [ "CMD", "curl", "-f", "http://localhost:26258/health?ready=1" ]
       interval: 3s
       timeout: 5s
       retries: 3
@@ -30,7 +27,7 @@ services:
     volumes:
       - solitar-data:/tmp/solitar
     depends_on:
-      postgres_db:
+      cockroach_db:
         condition: service_healthy
       redis:
         condition: service_healthy
