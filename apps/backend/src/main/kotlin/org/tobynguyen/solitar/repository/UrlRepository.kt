@@ -18,7 +18,7 @@ interface UrlRepository : JpaRepository<UrlEntity, Long> {
 
     fun findByOriginalUrlAndExpiresAtIsNullAndHasAliasFalse(originalUrl: String): List<UrlEntity>
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE UrlEntity u SET u.clickCount = u.clickCount + 1 WHERE u.id = :id")
     fun incrementClickCount(id: Long)
 

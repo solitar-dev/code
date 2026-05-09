@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp
 class UrlEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "url_gen")
-    @SequenceGenerator(name = "url_gen", sequenceName = "url_seq", allocationSize = 1)
+    @SequenceGenerator(name = "url_gen", sequenceName = "url_seq", allocationSize = 50)
     var id: Long = 0,
     @Column(nullable = false, unique = true) @field:Size(min = 7) var shortCode: String = "",
     @Column(nullable = false) var hasAlias: Boolean = false,
