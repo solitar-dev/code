@@ -10,7 +10,7 @@ services:
       - "127.0.0.1:26258:26258"
     command: start-single-node --insecure --http-addr=0.0.0.0:26258
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:26258/health?ready=1" ]
+      test: ["CMD", "curl", "-f", "http://localhost:26258/health?ready=1"]
       interval: 3s
       timeout: 5s
       retries: 3
