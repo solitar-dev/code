@@ -1,0 +1,284 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Solitar production KMS keys, secrets, ACM certificate, and regional WAF.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: solitar
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - prod
+  ApiDomainName:
+    Type: String
+    Default: api.solitar.link
+  ApiRateLimit:
+    Type: Number
+    Default: 1000
+    MinValue: 100
+    Description: Requests per five-minute WAF evaluation window per source IP.
+
+Resources:
+  SecretsKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} Secrets Manager encryption"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: EnableAccountAdministration
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: "*"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  SecretsKmsAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${ProjectName}/${Environment}/secrets"
+      TargetKeyId: !Ref SecretsKmsKey
+
+  DataKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} Aurora and ElastiCache encryption"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: EnableAccountAdministration
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: "*"
+          - Sid: AllowAWSResourceGrants
+            Effect: Allow
+            Principal:
+              Service:
+                - rds.amazonaws.com
+                - elasticache.amazonaws.com
+            Action:
+              - kms:CreateGrant
+              - kms:DescribeKey
+            Resource: "*"
+            Condition:
+              Bool:
+                kms:GrantIsForAWSResource: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  DataKmsAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${ProjectName}/${Environment}/data"
+      TargetKeyId: !Ref DataKmsKey
+
+  LogsKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} CloudWatch Logs encryption"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: EnableAccountAdministration
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: "*"
+          - Sid: AllowCloudWatchLogs
+            Effect: Allow
+            Principal:
+              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action:
+              - kms:Encrypt*
+              - kms:Decrypt*
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:Describe*
+            Resource: "*"
+            Condition:
+              ArnLike:
+                kms:EncryptionContext:aws:logs:arn: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:*"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  LogsKmsAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${ProjectName}/${Environment}/logs"
+      TargetKeyId: !Ref LogsKmsKey
+
+  DatabaseMasterSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} Aurora master credentials"
+      KmsKeyId: !Ref SecretsKmsKey
+      GenerateSecretString:
+        SecretStringTemplate: '{"username":"solitar_admin"}'
+        GenerateStringKey: password
+        PasswordLength: 32
+        ExcludeCharacters: '"@/\\'
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  CacheAuthSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} ElastiCache auth token"
+      KmsKeyId: !Ref SecretsKmsKey
+      GenerateSecretString:
+        SecretStringTemplate: '{"username":"default"}'
+        GenerateStringKey: authToken
+        PasswordLength: 32
+        ExcludePunctuation: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  ApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref ApiDomainName
+      ValidationMethod: DNS
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  ApiWebAcl:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub "${ProjectName}-${Environment}-api"
+      Description: Managed protections and endpoint rate limiting for the Solitar API.
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: true
+        MetricName: !Sub "${ProjectName}-${Environment}-api"
+        SampledRequestsEnabled: true
+      Rules:
+        - Name: AWSManagedCommonRuleSet
+          Priority: 0
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: AWSManagedCommonRuleSet
+            SampledRequestsEnabled: true
+        - Name: AWSManagedKnownBadInputsRuleSet
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesKnownBadInputsRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: AWSManagedKnownBadInputsRuleSet
+            SampledRequestsEnabled: true
+        - Name: SensitiveEndpointRateLimit
+          Priority: 10
+          Action:
+            Block: {}
+          Statement:
+            RateBasedStatement:
+              AggregateKeyType: IP
+              Limit: !Ref ApiRateLimit
+              ScopeDownStatement:
+                OrStatement:
+                  Statements:
+                    - ByteMatchStatement:
+                        FieldToMatch:
+                          UriPath: {}
+                        PositionalConstraint: STARTS_WITH
+                        SearchString: /create
+                        TextTransformations:
+                          - Priority: 0
+                            Type: NONE
+                    - ByteMatchStatement:
+                        FieldToMatch:
+                          UriPath: {}
+                        PositionalConstraint: STARTS_WITH
+                        SearchString: /forward
+                        TextTransformations:
+                          - Priority: 0
+                            Type: NONE
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: SensitiveEndpointRateLimit
+            SampledRequestsEnabled: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  SecretsKmsKeyArn:
+    Value: !GetAtt SecretsKmsKey.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-SecretsKmsKeyArn"
+  DataKmsKeyArn:
+    Value: !GetAtt DataKmsKey.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DataKmsKeyArn"
+  LogsKmsKeyArn:
+    Value: !GetAtt LogsKmsKey.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LogsKmsKeyArn"
+  DatabaseMasterSecretArn:
+    Value: !Ref DatabaseMasterSecret
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+  CacheAuthSecretArn:
+    Value: !Ref CacheAuthSecret
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-CacheAuthSecretArn"
+  ApiCertificateArn:
+    Description: The stack completes only after manual DNS validation succeeds.
+    Value: !Ref ApiCertificate
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-ApiCertificateArn"
+  ApiWebAclArn:
+    Value: !GetAtt ApiWebAcl.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-ApiWebAclArn"

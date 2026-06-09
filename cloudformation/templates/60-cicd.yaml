@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Solitar production GitHub Actions OIDC provider and least-privilege deployment role.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: solitar
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - prod
+  GitHubOrganization:
+    Type: String
+    Default: solitar-dev
+  GitHubRepository:
+    Type: String
+    Default: code
+  GitHubBranch:
+    Type: String
+    Default: prod
+  ExistingGitHubOidcProviderArn:
+    Type: String
+    Default: ""
+    Description: Supply the account's existing token.actions.githubusercontent.com provider ARN, or leave blank to create it.
+
+Conditions:
+  CreateGitHubOidcProvider: !Equals [!Ref ExistingGitHubOidcProviderArn, ""]
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateGitHubOidcProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  GitHubDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-github-deploy"
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - CreateGitHubOidcProvider
+                - !Ref GitHubOidcProvider
+                - !Ref ExistingGitHubOidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub:
+                  - !Sub "repo:${GitHubOrganization}/${GitHubRepository}:ref:refs/heads/${GitHubBranch}"
+                  - !Sub "repo:${GitHubOrganization}/${GitHubRepository}:environment:${Environment}"
+      Policies:
+        - PolicyName: PushBackendImages
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ecr:GetAuthorizationToken
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:CompleteLayerUpload
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:InitiateLayerUpload
+                  - ecr:ListImages
+                  - ecr:PutImage
+                  - ecr:UploadLayerPart
+                Resource:
+                  Fn::ImportValue: !Sub "${ProjectName}-${Environment}-BackendRepositoryArn"
+        - PolicyName: DeployBackendService
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecs:RegisterTaskDefinition
+                  - ecs:DeregisterTaskDefinition
+                  - ecs:DescribeTaskDefinition
+                  - ecs:ListTaskDefinitions
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ecs:DescribeServices
+                  - ecs:UpdateService
+                Resource:
+                  Fn::Sub:
+                    - "arn:${AWS::Partition}:ecs:${AWS::Region}:${AWS::AccountId}:service/${ClusterName}/${ServiceName}"
+                    - ClusterName:
+                        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-BackendClusterName"
+                      ServiceName:
+                        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-BackendServiceName"
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-TaskExecutionRoleArn"
+                  - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-TaskRoleArn"
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: ecs-tasks.amazonaws.com
+        - PolicyName: ReadDeploymentMetadata
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:DescribeStacks
+                  - cloudformation:ListExports
+                Resource: "*"
+        - PolicyName: TriggerFrontendDeployment
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - amplify:GetBranch
+                  - amplify:GetJob
+                  - amplify:StartJob
+                Resource:
+                  Fn::Sub:
+                    - "${AppArn}/branches/${BranchName}"
+                    - AppArn:
+                        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-AmplifyAppArn"
+                      BranchName:
+                        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-AmplifyBranchName"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  GitHubOidcProviderArn:
+    Value: !If
+      - CreateGitHubOidcProvider
+      - !Ref GitHubOidcProvider
+      - !Ref ExistingGitHubOidcProviderArn
+  GitHubDeploymentRoleArn:
+    Value: !GetAtt GitHubDeploymentRole.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-GitHubDeploymentRoleArn"
+  GitHubDeploymentRoleName:
+    Value: !Ref GitHubDeploymentRole

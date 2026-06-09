@@ -1,0 +1,402 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Solitar production ECR, ECS Fargate backend, ALB, and WAF association.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: solitar
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - prod
+  DatabaseName:
+    Type: String
+    Default: solitar
+  BackendImageTag:
+    Type: String
+    Default: latest
+  DeployService:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Set true only after the backend image exists in the new ECR repository.
+  DesiredCount:
+    Type: Number
+    Default: 2
+    MinValue: 2
+  TaskCpu:
+    Type: String
+    Default: "512"
+    AllowedValues:
+      - "256"
+      - "512"
+      - "1024"
+      - "2048"
+  TaskMemory:
+    Type: String
+    Default: "1024"
+  HealthCheckPath:
+    Type: String
+    Default: /statistics
+  EnableAlbDeletionProtection:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+
+Conditions:
+  CreateEcsService: !Equals [!Ref DeployService, "true"]
+
+Resources:
+  BackendRepository:
+    Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      RepositoryName: !Sub "${ProjectName}/backend"
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      ImageTagMutability: MUTABLE
+      EncryptionConfiguration:
+        EncryptionType: AES256
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Keep the newest 30 release images",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 30
+                },
+                "action": { "type": "expire" }
+              }
+            ]
+          }
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  BackendCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "${ProjectName}-${Environment}"
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  BackendLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub "/ecs/${ProjectName}-${Environment}-backend"
+      KmsKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-LogsKmsKeyArn"
+      RetentionInDays: 30
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-ecs-execution"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: PullBackendImage
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ecr:GetAuthorizationToken
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                Resource: !GetAtt BackendRepository.Arn
+        - PolicyName: WriteBackendLogs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${BackendLogGroup}:log-stream:*"
+        - PolicyName: ReadRuntimeSecrets
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource:
+                  - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+                  - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-CacheConnectionSecretArn"
+              - Effect: Allow
+                Action: kms:Decrypt
+                Resource:
+                  Fn::ImportValue: !Sub "${ProjectName}-${Environment}-SecretsKmsKeyArn"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-ecs-task"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  BackendTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${ProjectName}-${Environment}-backend"
+      Cpu: !Ref TaskCpu
+      Memory: !Ref TaskMemory
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      TaskRoleArn: !GetAtt TaskRole.Arn
+      RuntimePlatform:
+        CpuArchitecture: X86_64
+        OperatingSystemFamily: LINUX
+      ContainerDefinitions:
+        - Name: backend
+          Essential: true
+          Image: !Sub "${BackendRepository.RepositoryUri}:${BackendImageTag}"
+          PortMappings:
+            - ContainerPort: 8080
+              HostPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: prod
+            - Name: SERVER_PORT
+              Value: "8080"
+            - Name: DATABASE_URL
+              Value:
+                Fn::Sub:
+                  - "jdbc:postgresql://${DatabaseEndpoint}:5432/${DatabaseName}?sslmode=require"
+                  - DatabaseEndpoint:
+                      Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseWriterEndpoint"
+          Secrets:
+            - Name: DATABASE_USERNAME
+              ValueFrom:
+                Fn::Sub:
+                  - "${SecretArn}:username::"
+                  - SecretArn:
+                      Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+            - Name: DATABASE_PASSWORD
+              ValueFrom:
+                Fn::Sub:
+                  - "${SecretArn}:password::"
+                  - SecretArn:
+                      Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+            - Name: REDIS_URL
+              ValueFrom:
+                Fn::Sub:
+                  - "${SecretArn}:url::"
+                  - SecretArn:
+                      Fn::ImportValue: !Sub "${ProjectName}-${Environment}-CacheConnectionSecretArn"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref BackendLogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: backend
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub "${ProjectName}-${Environment}-api"
+      Scheme: internet-facing
+      Type: application
+      IpAddressType: ipv4
+      SecurityGroups:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-AlbSecurityGroupId"
+      Subnets:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-PublicSubnetAId"
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-PublicSubnetBId"
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: !Ref EnableAlbDeletionProtection
+        - Key: routing.http.drop_invalid_header_fields.enabled
+          Value: "true"
+        - Key: routing.http.xff_client_port.enabled
+          Value: "true"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  BackendTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${ProjectName}-${Environment}-backend"
+      TargetType: ip
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Port: 8080
+      VpcId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-VpcId"
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: !Ref HealthCheckPath
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: 200-399
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  HttpsListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-2021-06
+      Certificates:
+        - CertificateArn:
+            Fn::ImportValue: !Sub "${ProjectName}-${Environment}-ApiCertificateArn"
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref BackendTargetGroup
+
+  ApiWebAclAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Ref LoadBalancer
+      WebACLArn:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-ApiWebAclArn"
+
+  BackendService:
+    Type: AWS::ECS::Service
+    Condition: CreateEcsService
+    DependsOn: HttpsListener
+    Properties:
+      ServiceName: !Sub "${ProjectName}-${Environment}-backend"
+      Cluster: !Ref BackendCluster
+      TaskDefinition: !Ref BackendTaskDefinition
+      DesiredCount: !Ref DesiredCount
+      EnableECSManagedTags: true
+      HealthCheckGracePeriodSeconds: 120
+      LaunchType: FARGATE
+      PlatformVersion: LATEST
+      PropagateTags: SERVICE
+      DeploymentConfiguration:
+        DeploymentCircuitBreaker:
+          Enable: true
+          Rollback: true
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      LoadBalancers:
+        - ContainerName: backend
+          ContainerPort: 8080
+          TargetGroupArn: !Ref BackendTargetGroup
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-EcsSecurityGroupId"
+          Subnets:
+            - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-AppSubnetAId"
+            - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-AppSubnetBId"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  BackendRepositoryUri:
+    Value: !GetAtt BackendRepository.RepositoryUri
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendRepositoryUri"
+  BackendRepositoryArn:
+    Value: !GetAtt BackendRepository.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendRepositoryArn"
+  BackendClusterName:
+    Value: !Ref BackendCluster
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendClusterName"
+  BackendClusterArn:
+    Value: !GetAtt BackendCluster.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendClusterArn"
+  BackendServiceName:
+    Description: Fixed service name. The resource exists only when DeployService is true.
+    Value: !Sub "${ProjectName}-${Environment}-backend"
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendServiceName"
+  BackendTaskDefinitionArn:
+    Value: !Ref BackendTaskDefinition
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-BackendTaskDefinitionArn"
+  TaskExecutionRoleArn:
+    Value: !GetAtt TaskExecutionRole.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-TaskExecutionRoleArn"
+  TaskRoleArn:
+    Value: !GetAtt TaskRole.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-TaskRoleArn"
+  LoadBalancerDnsName:
+    Value: !GetAtt LoadBalancer.DNSName
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LoadBalancerDnsName"
+  ApiSuggestedCnameTarget:
+    Description: Configure api.solitar.link as a CNAME to this value after validation.
+    Value: !GetAtt LoadBalancer.DNSName
+  LoadBalancerArn:
+    Value: !Ref LoadBalancer
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-LoadBalancerArn"

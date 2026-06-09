@@ -1,0 +1,232 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Solitar production Aurora Serverless v2 PostgreSQL and ElastiCache Valkey.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: solitar
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - prod
+  DatabaseName:
+    Type: String
+    Default: solitar
+    AllowedPattern: "^[a-zA-Z][a-zA-Z0-9_]{0,62}$"
+  AuroraMinAcu:
+    Type: Number
+    Default: 1
+    MinValue: 0.5
+  AuroraMaxAcu:
+    Type: Number
+    Default: 4
+    MinValue: 1
+  CacheNodeType:
+    Type: String
+    Default: cache.t4g.small
+  BackupRetentionDays:
+    Type: Number
+    Default: 7
+    MinValue: 1
+    MaxValue: 35
+
+Resources:
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Solitar private database subnets
+      SubnetIds:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataSubnetAId"
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataSubnetBId"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  DatabaseLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub "/aws/rds/cluster/${ProjectName}-${Environment}-aurora/postgresql"
+      KmsKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-LogsKmsKeyArn"
+      RetentionInDays: 30
+
+  DatabaseCluster:
+    Type: AWS::RDS::DBCluster
+    DependsOn: DatabaseLogGroup
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+    Properties:
+      DBClusterIdentifier: !Sub "${ProjectName}-${Environment}-aurora"
+      DatabaseName: !Ref DatabaseName
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      DeletionProtection: true
+      BackupRetentionPeriod: !Ref BackupRetentionDays
+      CopyTagsToSnapshot: true
+      EnableCloudwatchLogsExports:
+        - postgresql
+      Engine: aurora-postgresql
+      EngineMode: provisioned
+      KmsKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataKmsKeyArn"
+      MasterUsername:
+        Fn::Sub:
+          - "{{resolve:secretsmanager:${SecretArn}:SecretString:username}}"
+          - SecretArn:
+              Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+      MasterUserPassword:
+        Fn::Sub:
+          - "{{resolve:secretsmanager:${SecretArn}:SecretString:password}}"
+          - SecretArn:
+              Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+      Port: 5432
+      PreferredBackupWindow: 18:00-19:00
+      PreferredMaintenanceWindow: sun:19:30-sun:20:30
+      ServerlessV2ScalingConfiguration:
+        MinCapacity: !Ref AuroraMinAcu
+        MaxCapacity: !Ref AuroraMaxAcu
+      StorageEncrypted: true
+      VpcSecurityGroupIds:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseSecurityGroupId"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  DatabaseWriter:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+    Properties:
+      DBClusterIdentifier: !Ref DatabaseCluster
+      DBInstanceClass: db.serverless
+      DBInstanceIdentifier: !Sub "${ProjectName}-${Environment}-aurora-writer"
+      Engine: aurora-postgresql
+      EnablePerformanceInsights: true
+      PerformanceInsightsKMSKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataKmsKeyArn"
+      PerformanceInsightsRetentionPeriod: 7
+      PromotionTier: 0
+      PubliclyAccessible: false
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  DatabaseReader:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+    Properties:
+      DBClusterIdentifier: !Ref DatabaseCluster
+      DBInstanceClass: db.serverless
+      DBInstanceIdentifier: !Sub "${ProjectName}-${Environment}-aurora-reader"
+      Engine: aurora-postgresql
+      EnablePerformanceInsights: true
+      PerformanceInsightsKMSKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataKmsKeyArn"
+      PerformanceInsightsRetentionPeriod: 7
+      PromotionTier: 1
+      PubliclyAccessible: false
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  DatabaseSecretAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DatabaseMasterSecretArn"
+      TargetId: !Ref DatabaseCluster
+      TargetType: AWS::RDS::DBCluster
+
+  CacheSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: Solitar private cache subnets
+      SubnetIds:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataSubnetAId"
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataSubnetBId"
+
+  CacheReplicationGroup:
+    Type: AWS::ElastiCache::ReplicationGroup
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+    Properties:
+      AtRestEncryptionEnabled: true
+      AuthToken:
+        Fn::Sub:
+          - "{{resolve:secretsmanager:${SecretArn}:SecretString:authToken}}"
+          - SecretArn:
+              Fn::ImportValue: !Sub "${ProjectName}-${Environment}-CacheAuthSecretArn"
+      AutomaticFailoverEnabled: true
+      AutoMinorVersionUpgrade: true
+      CacheNodeType: !Ref CacheNodeType
+      CacheSubnetGroupName: !Ref CacheSubnetGroup
+      Engine: valkey
+      KmsKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-DataKmsKeyArn"
+      MultiAZEnabled: true
+      NumCacheClusters: 2
+      Port: 6379
+      ReplicationGroupDescription: Solitar production cache and distributed rate limiter
+      ReplicationGroupId: !Sub "${ProjectName}-${Environment}-cache"
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-CacheSecurityGroupId"
+      SnapshotRetentionLimit: !Ref BackupRetentionDays
+      TransitEncryptionEnabled: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  CacheConnectionSecret:
+    Type: AWS::SecretsManager::Secret
+    DependsOn: CacheReplicationGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: !Sub "${ProjectName}-${Environment} complete TLS Redis connection URL"
+      KmsKeyId:
+        Fn::ImportValue: !Sub "${ProjectName}-${Environment}-SecretsKmsKeyArn"
+      SecretString:
+        Fn::Sub:
+          - '{"url":"rediss://:{{resolve:secretsmanager:${AuthSecretArn}:SecretString:authToken}}@${CacheReplicationGroup.PrimaryEndPoint.Address}:6379/0"}'
+          - AuthSecretArn:
+              Fn::ImportValue: !Sub "${ProjectName}-${Environment}-CacheAuthSecretArn"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  DatabaseWriterEndpoint:
+    Value: !GetAtt DatabaseCluster.Endpoint.Address
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DatabaseWriterEndpoint"
+  DatabaseReaderEndpoint:
+    Value: !GetAtt DatabaseCluster.ReadEndpoint.Address
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DatabaseReaderEndpoint"
+  DatabasePort:
+    Value: !GetAtt DatabaseCluster.Endpoint.Port
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DatabasePort"
+  CachePrimaryEndpoint:
+    Value: !GetAtt CacheReplicationGroup.PrimaryEndPoint.Address
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-CachePrimaryEndpoint"
+  CacheConnectionSecretArn:
+    Value: !Ref CacheConnectionSecret
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-CacheConnectionSecretArn"

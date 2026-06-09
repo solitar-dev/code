@@ -1,0 +1,96 @@
+{
+  "Region": "ap-southeast-1",
+  "Stacks": {
+    "foundation": {
+      "Name": "solitar-prod-foundation",
+      "Template": "cloudformation/templates/00-foundation.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" }
+      ]
+    },
+    "network": {
+      "Name": "solitar-prod-network",
+      "Template": "cloudformation/templates/10-network.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "VpcCidr", "ParameterValue": "10.40.0.0/16" },
+        { "ParameterKey": "PublicSubnetACidr", "ParameterValue": "10.40.0.0/24" },
+        { "ParameterKey": "PublicSubnetBCidr", "ParameterValue": "10.40.1.0/24" },
+        { "ParameterKey": "AppSubnetACidr", "ParameterValue": "10.40.10.0/24" },
+        { "ParameterKey": "AppSubnetBCidr", "ParameterValue": "10.40.11.0/24" },
+        { "ParameterKey": "DataSubnetACidr", "ParameterValue": "10.40.20.0/24" },
+        { "ParameterKey": "DataSubnetBCidr", "ParameterValue": "10.40.21.0/24" }
+      ]
+    },
+    "security": {
+      "Name": "solitar-prod-security",
+      "Template": "cloudformation/templates/20-security.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "ApiDomainName", "ParameterValue": "api.solitar.link" },
+        { "ParameterKey": "ApiRateLimit", "ParameterValue": "1000" }
+      ]
+    },
+    "data": {
+      "Name": "solitar-prod-data",
+      "Template": "cloudformation/templates/30-data.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "DatabaseName", "ParameterValue": "solitar" },
+        { "ParameterKey": "AuroraMinAcu", "ParameterValue": "1" },
+        { "ParameterKey": "AuroraMaxAcu", "ParameterValue": "4" },
+        { "ParameterKey": "CacheNodeType", "ParameterValue": "cache.t4g.small" },
+        { "ParameterKey": "BackupRetentionDays", "ParameterValue": "7" }
+      ]
+    },
+    "backend": {
+      "Name": "solitar-prod-backend",
+      "Template": "cloudformation/templates/40-backend.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "DatabaseName", "ParameterValue": "solitar" },
+        { "ParameterKey": "BackendImageTag", "ParameterValue": "latest" },
+        { "ParameterKey": "DeployService", "ParameterValue": "false" },
+        { "ParameterKey": "DesiredCount", "ParameterValue": "2" },
+        { "ParameterKey": "TaskCpu", "ParameterValue": "512" },
+        { "ParameterKey": "TaskMemory", "ParameterValue": "1024" },
+        { "ParameterKey": "HealthCheckPath", "ParameterValue": "/statistics" },
+        { "ParameterKey": "EnableAlbDeletionProtection", "ParameterValue": "true" }
+      ]
+    },
+    "frontend": {
+      "Name": "solitar-prod-frontend",
+      "Template": "cloudformation/templates/50-frontend.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "RepositoryUrl", "ParameterValue": "https://github.com/solitar-dev/code" },
+        { "ParameterKey": "BranchName", "ParameterValue": "prod" },
+        { "ParameterKey": "GitHubAccessToken", "ParameterValue": "REPLACE_WITH_FINE_GRAINED_GITHUB_TOKEN" },
+        { "ParameterKey": "ApiBaseUrl", "ParameterValue": "https://api.solitar.link" },
+        { "ParameterKey": "SiteUrl", "ParameterValue": "https://solitar.link" },
+        { "ParameterKey": "SiteDomainName", "ParameterValue": "solitar.link" },
+        { "ParameterKey": "CreateCustomDomain", "ParameterValue": "false" }
+      ]
+    },
+    "cicd": {
+      "Name": "solitar-prod-cicd",
+      "Template": "cloudformation/templates/60-cicd.yaml",
+      "Parameters": [
+        { "ParameterKey": "ProjectName", "ParameterValue": "solitar" },
+        { "ParameterKey": "Environment", "ParameterValue": "prod" },
+        { "ParameterKey": "GitHubOrganization", "ParameterValue": "solitar-dev" },
+        { "ParameterKey": "GitHubRepository", "ParameterValue": "code" },
+        { "ParameterKey": "GitHubBranch", "ParameterValue": "prod" },
+        { "ParameterKey": "ExistingGitHubOidcProviderArn", "ParameterValue": "" }
+      ]
+    }
+  }
+}
+
+

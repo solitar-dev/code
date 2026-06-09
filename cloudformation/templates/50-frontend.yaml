@@ -1,0 +1,189 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Solitar production Nuxt SSR hosting on AWS Amplify.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: solitar
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - prod
+  RepositoryUrl:
+    Type: String
+    Default: https://github.com/solitar-dev/code
+  BranchName:
+    Type: String
+    Default: prod
+  GitHubAccessToken:
+    Type: String
+    NoEcho: true
+    MinLength: 1
+    Description: Fine-grained GitHub token used once to install/connect the Amplify GitHub App.
+  ApiBaseUrl:
+    Type: String
+    Default: https://api.solitar.link
+  SiteUrl:
+    Type: String
+    Default: https://solitar.link
+  SiteDomainName:
+    Type: String
+    Default: solitar.link
+  CreateCustomDomain:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+
+Conditions:
+  CreateDomainAssociation: !Equals [!Ref CreateCustomDomain, "true"]
+
+Resources:
+  AmplifyServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${Environment}-amplify"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: amplify.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AmplifySsrLogs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/amplify/*"
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/amplify/*:log-stream:*"
+              - Effect: Allow
+                Action: logs:DescribeLogGroups
+                Resource: "*"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  FrontendApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: !Sub "${ProjectName}-${Environment}-frontend"
+      Description: Solitar production Nuxt SSR frontend
+      Platform: WEB_COMPUTE
+      Repository: !Ref RepositoryUrl
+      AccessToken: !Ref GitHubAccessToken
+      IAMServiceRole: !GetAtt AmplifyServiceRole.Arn
+      EnableBranchAutoDeletion: true
+      EnvironmentVariables:
+        - Name: AMPLIFY_MONOREPO_APP_ROOT
+          Value: apps/frontend
+        - Name: NUXT_PUBLIC_API_BASE_URL
+          Value: !Ref ApiBaseUrl
+        - Name: NUXT_PUBLIC_SITE_URL
+          Value: !Ref SiteUrl
+        - Name: NUXT_PUBLIC_SITE_NAME
+          Value: Solitar
+        - Name: NUXT_PUBLIC_SITE_ENV
+          Value: production
+        - Name: NITRO_PRESET
+          Value: aws_amplify
+      BuildSpec: |
+        version: 1
+        applications:
+          - appRoot: apps/frontend
+            frontend:
+              buildPath: /
+              phases:
+                preBuild:
+                  commands:
+                    - nvm install 22
+                    - nvm use 22
+                    - corepack enable
+                    - corepack prepare pnpm@10.33.2 --activate
+                    - pnpm install --frozen-lockfile
+                build:
+                  commands:
+                    - NITRO_PRESET=aws_amplify pnpm --filter @solitar/frontend build
+              artifacts:
+                baseDirectory: apps/frontend/.amplify-hosting
+                files:
+                  - "**/*"
+              cache:
+                paths:
+                  - node_modules/**/*
+                  - .pnpm-store/**/*
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  FrontendBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt FrontendApp.AppId
+      BranchName: !Ref BranchName
+      Description: Solitar production branch
+      EnableAutoBuild: true
+      EnablePerformanceMode: false
+      EnablePullRequestPreview: false
+      EnableSkewProtection: true
+      Framework: Nuxt - SSR
+      Stage: PRODUCTION
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  FrontendDomain:
+    Type: AWS::Amplify::Domain
+    Condition: CreateDomainAssociation
+    Properties:
+      AppId: !GetAtt FrontendApp.AppId
+      DomainName: !Ref SiteDomainName
+      EnableAutoSubDomain: false
+      CertificateSettings:
+        CertificateType: AMPLIFY_MANAGED
+      SubDomainSettings:
+        - BranchName: !GetAtt FrontendBranch.BranchName
+          Prefix: ""
+        - BranchName: !GetAtt FrontendBranch.BranchName
+          Prefix: www
+
+Outputs:
+  AmplifyAppId:
+    Value: !GetAtt FrontendApp.AppId
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-AmplifyAppId"
+  AmplifyAppArn:
+    Value: !GetAtt FrontendApp.Arn
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-AmplifyAppArn"
+  AmplifyBranchName:
+    Value: !GetAtt FrontendBranch.BranchName
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-AmplifyBranchName"
+  AmplifyDefaultDomain:
+    Value: !GetAtt FrontendApp.DefaultDomain
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-AmplifyDefaultDomain"
+  AmplifyDefaultUrl:
+    Value: !Sub "https://${FrontendBranch.BranchName}.${FrontendApp.DefaultDomain}"
+  AmplifyCertificateValidationRecord:
+    Condition: CreateDomainAssociation
+    Description: Add this record at the current DNS provider when requested by Amplify.
+    Value: !GetAtt FrontendDomain.CertificateRecord
+  AmplifyDomainStatus:
+    Condition: CreateDomainAssociation
+    Value: !GetAtt FrontendDomain.DomainStatus
