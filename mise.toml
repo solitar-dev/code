@@ -1,36 +1,5 @@
 [tools]
 java = "graalvm-community-25"
-node = "25"
-pnpm = "10.30.3"
 
 [env]
 _.file = ["apps/backend/.env.local", "apps/frontend/.env.local"]
-
-[tasks.pnpm-install]
-run = "pnpm install"
-sources = ["package.json", "pnpm-lock.yaml", "mise.toml"]
-outputs = ["node_modules/.pnpm/lock.yaml"]
-
-[tasks.dev]
-depends = ["pnpm-install"]
-run = "pnpm dev"
-
-[tasks.lint]
-depends = ["pnpm-install"]
-run = "pnpm lint"
-
-[tasks.lint-fix]
-depends = ["pnpm-install"]
-run = "pnpm lint:fix"
-
-[tasks.test]
-depends = ["pnpm-install"]
-run = "pnpm test"
-
-[tasks.build]
-depends = ["lint", "test", "pnpm-install"]
-run = "pnpm build"
-
-[tasks.ci]
-depends = ["pnpm-install"]
-run = "pnpm run ci"
