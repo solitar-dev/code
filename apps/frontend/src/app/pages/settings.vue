@@ -10,6 +10,7 @@ useSeoMeta({
 	description: $t("site.settings.description"),
 	ogDescription: $t("site.settings.description"),
 	twitterDescription: $t("site.settings.description"),
+	robots: "noindex, follow",
 });
 </script>
 

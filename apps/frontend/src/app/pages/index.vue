@@ -8,6 +8,16 @@ useSeoMeta({
 	ogDescription: $t("site.url_shortener.description"),
 	twitterDescription: $t("site.url_shortener.description"),
 });
+
+// Structured data (H2): the app itself
+useSchemaOrg([
+	defineSoftwareApp({
+		name: "Solitar",
+		applicationCategory: "UtilitiesApplication",
+		operatingSystem: "Web",
+		offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+	}),
+]);
 </script>
 
 <template>

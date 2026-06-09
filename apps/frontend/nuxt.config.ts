@@ -5,6 +5,8 @@ export default defineNuxtConfig({
 		"@nuxtjs/color-mode",
 		"@vueuse/nuxt",
 		"@regle/nuxt",
+		"@nuxtjs/sitemap",
+		"nuxt-schema-org",
 		"nuxt-og-image",
 		"vue-sonner/nuxt",
 		"@nuxtjs/i18n",
@@ -59,6 +61,25 @@ export default defineNuxtConfig({
 				env: "",
 			},
 		},
+	},
+	// SEO site config (consumed by nuxt-site-config — pulled in by sitemap/schema/og).
+	// Single fixed domain — absolute URL so sitemap + schema resolve correctly.
+	site: {
+		url: "https://solitar.link",
+		name: "Solitar",
+	},
+	// Global <html lang> (H3). No title template is applied (seo-utils intentionally
+	// not used), so page titles render exactly as authored (H4).
+	app: {
+		head: {
+			htmlAttrs: { lang: "en" },
+		},
+	},
+	// Sitemap (C1): single flat /sitemap.xml (one locale — skip i18n index split);
+	// only public pages, exclude utility/dynamic routes.
+	sitemap: {
+		autoI18n: false,
+		exclude: ["/settings", "/unlock"],
 	},
 	// Build
 	nitro: {

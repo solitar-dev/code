@@ -1,0 +1,16 @@
+# Solitar
+
+> Open-source URL shortener and QR code generator. Instant redirects, REST API,
+> link expiry, security verification, and privacy-focused analytics. MIT licensed,
+> self-hostable.
+
+## Pages
+
+- [URL shortener (home)](https://solitar.link/): Shorten long links in seconds.
+- [QR code generator](https://solitar.link/qr): Create and download QR codes for any URL.
+
+## Developer
+
+- [API documentation](https://docs.solitar.link): REST API for automating link creation.
+- [Source code (GitHub, MIT)](https://github.com/solitar-dev/code): Audit or self-host Solitar.
+- [Status](https://status.solitar.link): Service status.
