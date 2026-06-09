@@ -1,0 +1,141 @@
+{
+	"site": {
+		"url_shortener": {
+			"title": "rút gọn url - solitar",
+			"og_title": "Rút Gọn URL - Solitar",
+			"description": "Tạo url ngắn cho website và trang mạng xã hội của bạn trong vài giây"
+		},
+		"qr_generator": {
+			"title": "tạo mã qr - solitar",
+			"og_title": "Trình Tạo Mã QR - Solitar",
+			"description": "Tạo mã qr cho url của bạn trong vài giây, lưu và chia sẻ ngay lập tức"
+		},
+		"settings": {
+			"title": "cài đặt - solitar",
+			"og_title": "Cài Đặt - Solitar",
+			"description": "Tùy chỉnh trải nghiệm solitar của bạn"
+		}
+	},
+
+	"nav": {
+		"url_shortener": "rút gọn url",
+		"qr_generator": "tạo mã qr",
+		"settings": "cài đặt"
+	},
+
+	"footer": {
+		"column": {
+			"about": "giới thiệu",
+			"resource": "tài nguyên",
+			"legal": "pháp lý"
+		},
+		"item": {
+			"changelog": "nhật ký thay đổi",
+			"status": "trạng thái",
+			"translate": "dịch thuật",
+			"api": "api",
+			"terms_of_use": "điều khoản sử dụng",
+			"privacy_policy": "chính sách bảo mật",
+			"report": "báo cáo"
+		}
+	},
+
+	"feature": {
+		"title": "Solitar có những gì?",
+		"subtitle": "Mọi thứ bạn cần khi làm việc với url",
+		"item": {
+			"speed": {
+				"title": "Nhanh Chóng Mặt",
+				"description": "Chuyển hướng tức thì, không độ trễ. Không trang trung gian hay quảng cáo chèn ngang."
+			},
+			"analytics": {
+				"title": "Phân Tích Tôn Trọng Quyền Riêng Tư",
+				"description": "Theo dõi lượt nhấp và nguồn truy cập mà không thu thập dữ liệu cá nhân người dùng."
+			},
+			"api": {
+				"title": "Ưu Tiên Lập Trình Viên",
+				"description": "REST API mạnh mẽ để tự động tạo liên kết ngay trong ứng dụng của bạn."
+			},
+			"expiration": {
+				"title": "Hết Hạn Linh Hoạt",
+				"description": "Đặt liên kết tồn tại vĩnh viễn hoặc tự hủy sau một khoảng thời gian nhất định."
+			},
+			"security": {
+				"title": "Xác Minh Bảo Mật",
+				"description": "Cảnh báo người dùng khi truy cập các trang web không tuân thủ tiêu chuẩn bảo mật."
+			},
+			"open_source": {
+				"title": "Mã Nguồn Mở",
+				"description": "Logic chuyển hướng hoàn toàn minh bạch. Kiểm tra mã nguồn, tự lưu trữ."
+			}
+		}
+	},
+
+	"form": {
+		"password": {
+			"empty": "Mật khẩu không được để trống",
+			"invalid": "Mật khẩu phải là chuỗi ký tự",
+			"min": "Mật khẩu phải có ít nhất 3 ký tự",
+			"max": "Mật khẩu không được vượt quá 255 ký tự"
+		},
+		"url": {
+			"required": "URL là bắt buộc",
+			"invalid": "URL không hợp lệ"
+		},
+		"alias": {
+			"invalid": "Bí danh phải là chuỗi ký tự",
+			"min": "Bí danh phải có ít nhất 7 ký tự",
+			"max": "Bí danh không được vượt quá 255 ký tự"
+		},
+		"expire_time": {
+			"invalid": "Thời gian hết hạn phải là số",
+			"min": "Thời gian hết hạn phải lớn hơn 0"
+		}
+	},
+
+	"settings": {
+		"theme": {
+			"auto": "Tự động",
+			"light": "Sáng",
+			"dark": "Tối"
+		}
+	},
+
+	"counter": "{count} liên kết đã được tạo và truy cập {clicks} lần",
+
+	"hero": {
+		"title": "Công cụ tất-cả-trong-một mà bạn cần.",
+		"subtitle_1": "Solitar là nền tảng mã nguồn mở, mạnh mẽ, dùng hằng ngày, giúp bạn rút gọn liên kết dài và tạo mã qr tức thì.",
+		"subtitle_2": "Solitar mang đến chuyển hướng tức thì không quảng cáo chèn ngang, tự động hóa quy trình với REST API và đặt thời hạn linh hoạt cho liên kết của bạn."
+	},
+
+	"not_secure_warning": {
+		"title": "Kết nối của bạn không an toàn",
+		"description": "Liên kết bạn sắp truy cập không dùng HTTPS, nghĩa là kết nối của bạn không được mã hóa. Dữ liệu của bạn có thể bị bên thứ ba chặn lấy.",
+		"enforce_https": "Bắt buộc HTTPS",
+		"accept_risk": "Chấp nhận rủi ro & tiếp tục"
+	},
+
+	"unlock": {
+		"title": "URL đã bị khóa",
+		"description": "Liên kết bạn sắp truy cập đã bị người tạo khóa. Vui lòng nhập mật khẩu để mở khóa"
+	},
+
+	"button": {
+		"download": "tải xuống",
+		"copy_url": "sao chép url",
+		"close": "đóng",
+		"unlock": "mở khóa",
+		"return": "quay lại"
+	},
+
+	"error": {
+		"url_not_found": "Không tìm thấy URL",
+		"url_expired": "URL này không còn khả dụng",
+		"url_disabled": "URL này đã bị vô hiệu hóa do vi phạm điều khoản",
+		"short_code_conflict": "Bí danh này đã tồn tại.",
+		"password_protected": "Vui lòng nhập mật khẩu hợp lệ để mở khóa URL này",
+		"incorrect_password": "Mật khẩu được cung cấp không chính xác.",
+		"default": "Đã xảy ra lỗi"
+	}
+}

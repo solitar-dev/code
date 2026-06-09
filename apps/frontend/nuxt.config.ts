@@ -47,7 +47,19 @@ export default defineNuxtConfig({
 	i18n: {
 		restructureDir: "./src/i18n",
 		defaultLocale: "en",
-		locales: [{ code: "en", name: "English", file: "en.json" }],
+		// no_prefix: locale lives in a cookie, no /vi/ path — keeps the
+		// root /[shortCode] redirect route untouched.
+		strategy: "no_prefix",
+		locales: [
+			{ code: "en", name: "English", file: "en.json" },
+			{ code: "vi", name: "Tiếng Việt", file: "vi.json" },
+		],
+		// Detect browser language on first visit, then persist the choice.
+		detectBrowserLanguage: {
+			useCookie: true,
+			cookieKey: "i18n_redirected",
+			redirectOn: "root",
+		},
 	},
 	// Runtime
 	runtimeConfig: {

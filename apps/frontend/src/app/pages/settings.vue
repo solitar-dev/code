@@ -21,6 +21,7 @@ useSeoMeta({
 		</div>
 		<div class="flex flex-col gap-12">
 			<ThemeSetting />
+			<LanguageSetting />
 		</div>
 	</div>
 </template>
