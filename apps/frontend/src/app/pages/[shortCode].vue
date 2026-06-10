@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { parseURL } from "ufo";
 
+// Redirect resolver route — never index (M1). Does not alter redirect logic.
+useSeoMeta({ robots: "noindex, follow" });
+
 const route = useRoute();
 const { $api } = useNuxtApp();
 const urlRepository = repository($api);
