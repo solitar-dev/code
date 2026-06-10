@@ -22,23 +22,23 @@ const state = ref<FormData>({
 
 const { r$ } = useRegle(state, {
 	longUrl: {
-		required: withMessage(required, $t("form.url.required")),
-		url: withMessage(url, $t("form.url.invalid")),
+		required: withMessage(required, () => $t("form.url.required")),
+		url: withMessage(url, () => $t("form.url.invalid")),
 	},
 	alias: {
-		string: withMessage(string, $t("form.alias.invalid")),
-		minLength: withMessage(minLength(7), $t("form.alias.min")),
-		maxLength: withMessage(maxLength(255), $t("form.alias.max")),
+		string: withMessage(string, () => $t("form.alias.invalid")),
+		minLength: withMessage(minLength(7), () => $t("form.alias.min")),
+		maxLength: withMessage(maxLength(255), () => $t("form.alias.max")),
 	},
 	password: {
-		string: withMessage(string, $t("form.password.invalid")),
-		minLength: withMessage(minLength(3), $t("form.password.min")),
-		maxLength: withMessage(maxLength(255), $t("form.password.max")),
+		string: withMessage(string, () => $t("form.password.invalid")),
+		minLength: withMessage(minLength(3), () => $t("form.password.min")),
+		maxLength: withMessage(maxLength(255), () => $t("form.password.max")),
 	},
 	expireTime: {
 		required,
-		number: withMessage(number, $t("form.expire_time.invalid")),
-		minValue: withMessage(minValue(0), $t("form.expire_time.min")),
+		number: withMessage(number, () => $t("form.expire_time.invalid")),
+		minValue: withMessage(minValue(0), () => $t("form.expire_time.min")),
 	},
 	expireTimeUnit: {
 		required,

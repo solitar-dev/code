@@ -16,7 +16,7 @@ const state = ref<FormData>({
 
 const { r$ } = useRegle(state, {
 	password: {
-		required: withMessage(required, $t("form.password.empty")),
+		required: withMessage(required, () => $t("form.password.empty")),
 	},
 });
 

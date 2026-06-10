@@ -4,7 +4,8 @@ type Theme = {
 	name: string;
 };
 
-const themes: Theme[] = [
+// Recompute labels on locale change — setLocale() does not re-run setup.
+const themes = computed<Theme[]>(() => [
 	{
 		id: "system",
 		name: $t("settings.theme.auto"),
@@ -17,7 +18,7 @@ const themes: Theme[] = [
 		id: "dark",
 		name: $t("settings.theme.dark"),
 	},
-];
+]);
 
 const colorMode = useColorMode();
 

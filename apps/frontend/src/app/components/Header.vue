@@ -5,25 +5,18 @@ type NavigationItem = {
 	kbd: string;
 };
 
-const items: NavigationItem[] = [
-	{
-		name: $t("nav.url_shortener"),
-		path: "/",
-		kbd: "s",
-	},
-	{
-		name: $t("nav.qr_generator"),
-		path: "/qr",
-		kbd: "q",
-	},
-	{
-		name: $t("nav.settings"),
-		path: "/settings",
-		kbd: ",",
-	},
+const navigation = [
+	{ key: "nav.url_shortener", path: "/", kbd: "s" },
+	{ key: "nav.qr_generator", path: "/qr", kbd: "q" },
+	{ key: "nav.settings", path: "/settings", kbd: "," },
 ];
 
-items.forEach((item) => {
+// Recompute labels on locale change — setLocale() does not re-run setup.
+const items = computed<NavigationItem[]>(() =>
+	navigation.map(({ key, path, kbd }) => ({ name: $t(key), path, kbd })),
+);
+
+navigation.forEach((item) => {
 	onKeyStroke(item.kbd, (e) => {
 		if (!isEditableElement(e.target)) {
 			e.preventDefault();

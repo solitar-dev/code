@@ -19,7 +19,8 @@ const socialLinks: SocialLink[] = [
 	},
 ];
 
-const footerItems: FooterColumn[] = [
+// Recompute labels on locale change — setLocale() does not re-run setup.
+const footerItems = computed<FooterColumn[]>(() => [
 	{
 		title: $t("footer.column.about"),
 		items: [
@@ -63,7 +64,7 @@ const footerItems: FooterColumn[] = [
 			},
 		],
 	},
-];
+]);
 </script>
 
 <template>
